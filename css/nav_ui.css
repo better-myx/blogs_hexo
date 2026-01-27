@@ -48,9 +48,13 @@
       white-space: nowrap;
     }
 
-    /* 桌面端隐藏汉堡（已替换为菜单项） */
+    /* 桌面端隐藏汉堡按钮 - 使用更强的选择器 */
+    #nav #menus .nav-right-tools #toggle-menu,
     #nav #toggle-menu {
       display: none !important;
+      visibility: hidden !important;
+      opacity: 0 !important;
+      pointer-events: none !important;
     }
 
     /* 修正搜索按钮与右边的间距 */
@@ -59,7 +63,7 @@
     }
 }
 
-/* ============ 2) 移动端：不强改（避免破坏主题原行为） ============ */
+/* ============ 2) 移动端：显示汉堡按钮并使用 iconfont ============ */
 @media screen and (max-width: 899px) {
     /* 右侧工具区显示 */
     #nav #menus .nav-right-tools {
@@ -72,7 +76,22 @@
 
     /* 显示汉堡菜单按钮（移动端） */
     #toggle-menu {
-      display: block;
+      display: inline-flex !important;
+      align-items: center;
+      cursor: pointer;
+    }
+
+    /* 汉堡按钮内的 svg 图标样式 */
+    #toggle-menu .site-page {
+      display: inline-flex;
+      align-items: center;
+      padding: 0;
+    }
+
+    #toggle-menu svg.menu-svg-icon {
+      width: 1.25em !important;
+      height: 1.25em !important;
+      vertical-align: -0.15em;
     }
 
     /* 让右侧图标大小一致 */
