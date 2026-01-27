@@ -48,9 +48,14 @@
       white-space: nowrap;
     }
 
-    /* 桌面端隐藏汉堡（可选：如果你想保留就删掉这段） */
+    /* 桌面端隐藏汉堡（已替换为菜单项） */
     #nav #toggle-menu {
       display: none !important;
+    }
+
+    /* 修正搜索按钮与右边的间距 */
+    #nav #search-button {
+      margin-right: 10px !important;
     }
 }
 
@@ -77,7 +82,7 @@
       vertical-align: -0.15em;
     }
 
-    /* 5) 修复：搜索按钮在移动端显示 */
+    /* 修正：搜索按钮在移动端显示 */
     #nav #search-button,
     #nav #search-button .site-page.social-icon.search {
       display: inline-flex !important;
