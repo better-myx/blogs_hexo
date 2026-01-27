@@ -55,16 +55,30 @@
   }
   
   /* ============ 2) 移动端：不强改（避免破坏主题原行为） ============ */
-  @media screen and (max-width: 899px) {
-    /* 移动端不显示右侧工具区（你要显示也行，但容易挤） */
+/* ============ 右侧工具区 + 汉堡菜单：移动端显示 ============ */
+@media screen and (max-width: 899px) {
+    /* 右侧工具区显示 */
     #nav #menus .nav-right-tools {
-      display: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: .6rem;
+      flex: 0 0 auto;
     }
   
-    #nav #toggle-menu {
+    /* 显示汉堡菜单按钮（移动端） */
+    #toggle-menu {
       display: block;
     }
+    
+    /* 让右侧图标大小一致 */
+    #nav #menus .nav-right-tools svg.menu-svg-icon {
+      width: 1.25em;
+      height: 1.25em;
+      vertical-align: -0.15em;
+    }
   }
+  
   
   /* ============ 3) 菜单 iconfont 图标尺寸（给 menu_icons_injector.js 用） ============ */
   #nav .menus_items svg.menu-svg-icon {
