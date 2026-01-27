@@ -1,0 +1,56 @@
+/* =========================================================
+   beautify_panel.css
+   只管：美化设置弹窗（占位）
+   ========================================================= */
+
+   #beautify-panel.hidden { display: none; }
+
+   #beautify-panel {
+     position: fixed;
+     inset: 0;
+     z-index: 9999;
+   }
+   
+   #beautify-panel .beautify-panel-mask {
+     position: absolute;
+     inset: 0;
+     background: rgba(0,0,0,.35);
+   }
+   
+   /* 弹窗卡片：右上角靠近导航栏 */
+   #beautify-panel .beautify-panel-card {
+     position: absolute;
+     right: 24px;
+     top: 84px;
+     width: 560px;
+     max-width: calc(100vw - 48px);
+     background: rgba(255,255,255,.92);
+     border-radius: 16px;
+     box-shadow: 0 12px 30px rgba(0,0,0,.18);
+     overflow: hidden;
+   }
+   
+   #beautify-panel .beautify-panel-header {
+     display: flex;
+     align-items: center;
+     justify-content: space-between;
+     padding: 14px 16px;
+     font-weight: 700;
+   }
+   
+   #beautify-panel .beautify-panel-close {
+     font-size: 22px;
+     line-height: 1;
+     text-decoration: none;
+     opacity: .75;
+     cursor: pointer;
+   }
+   
+   #beautify-panel .beautify-panel-close:hover {
+     opacity: 1;
+   }
+   
+   #beautify-panel .beautify-panel-body {
+     padding: 14px 16px 18px;
+   }
+   

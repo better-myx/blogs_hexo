@@ -65,10 +65,18 @@
 [data-theme=dark] .aplayer .aplayer-list ol li.aplayer-list-light {
     background: #9c8098 !important;
 }
+/* 在这里添加新代码
+[data-theme=dark] .aplayer.aplayer-fixed .aplayer-miniswitcher {
+    background: rgba(22, 22, 22, 0.60) !important;
+    border-radius: 0 6px 6px 0 !important;
+}
+[data-theme=dark] .aplayer.aplayer-fixed .aplayer-miniswitcher .aplayer-icon path {
+    fill: #d4d4d4;
+} */
 [data-theme=dark] .aplayer .aplayer-info .aplayer-controller .aplayer-time,
 [data-theme=dark] .aplayer .aplayer-list ol li .aplayer-list-index,
 [data-theme=dark] .aplayer .aplayer-list ol li .aplayer-list-author {
-    color: #d4d4d4;
+    color: #c3c2c2;
 }
 
 /* 自动缩进隐藏 */
@@ -78,3 +86,23 @@
 .aplayer.aplayer-fixed.aplayer-narrow .aplayer-body:hover {
     left: 0 !important;
 }
+
+/* =================================================================== */
+/* APlayer 播放器稳定性优化 (最终版)                                   */
+/* =================================================================== */
+
+/* 
+ * 目标：彻底禁止 WOW.js 等滚动动画插件对播放器造成干扰，
+ * 同时保留播放器自身展开/收起的平滑过渡效果。
+ * 适用于修复初始加载和点击展开后的抖动、浮动问题。
+*/
+.aplayer.aplayer-fixed .aplayer-body {
+    /* 强制禁用任何形式的 animation 动画，防止浮动 */
+    animation: none !important; 
+    
+    /* 仅保留 left 属性的 transition，用于平滑侧滑，覆盖其他所有过渡效果 */
+    transition-property: left !important;
+    transition-duration: 0.4s !important;
+    transition-timing-function: ease !important;
+    transition-delay: 0s !important;
+  }

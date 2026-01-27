@@ -4378,7 +4378,10 @@ figure.highlight pre .javascript .function {
 }
 #page-header #post-info {
   position: absolute;
+  bottom: 100px;
+  padding: 0 8%;
   width: 100%;
+  text-align: center;
   bottom: 30px;
 }
 #page-header #post-info > * {
