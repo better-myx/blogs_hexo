@@ -5,30 +5,32 @@
 
 /* ============ 日间模式生效（可选：如果你不想在日间模式显示霓虹灯，删除这段） ============ */
 [data-theme="light"] #site-name,
-[data-theme="light"] #site-title {
-  animation: light_15px_light 10s linear infinite;
+[data-theme="light"] #site-title,
+[data-theme="light"] #nav #blog-info .site-name {
+  animation: light_15px_light 10s linear infinite !important;
 }
 
 [data-theme="light"] #site-subtitle {
-  animation: light_10px_light 10s linear infinite;
+  animation: light_10px_light 10s linear infinite !important;
 }
 
 [data-theme="light"] #post-info {
-  animation: light_15px_light 10s linear infinite;
+  animation: light_15px_light 10s linear infinite !important;
 }
 
 /* ============ 夜间模式生效（主要效果） ============ */
 [data-theme="dark"] #site-name,
-[data-theme="dark"] #site-title {
-  animation: light_15px_dark 10s linear infinite;
+[data-theme="dark"] #site-title,
+[data-theme="dark"] #nav #blog-info .site-name {
+  animation: light_15px_dark 10s linear infinite !important;
 }
 
 [data-theme="dark"] #site-subtitle {
-  animation: light_10px_dark 10s linear infinite;
+  animation: light_10px_dark 10s linear infinite !important;
 }
 
 [data-theme="dark"] #post-info {
-  animation: light_15px_dark 10s linear infinite;
+  animation: light_15px_dark 10s linear infinite !important;
 }
 
 /* ============ 日间模式关键帧 ============ */
