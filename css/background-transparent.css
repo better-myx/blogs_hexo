@@ -1,0 +1,39 @@
+/* ====================================
+   一图流背景 - 头图页脚半透明
+   ==================================== */
+
+/* 头图半透明 - 白天模式（暗色遮罩） */
+#page-header {
+    background: rgba(0, 0, 0, 0.2) !important;
+  }
+  
+  /* 页脚半透明 - 白天模式（暗色遮罩） */
+  #footer {
+    background: rgba(0, 0, 0, 0.2) !important;
+  }
+  
+  /* 白天模式遮罩透明 */
+  #footer::before {
+    background: transparent !important;
+  }
+  #page-header::before {
+    background: transparent !important;
+  }
+  
+  /* 头图 - 夜间模式（完全透明） */
+  [data-theme="dark"] #page-header {
+    background: transparent !important;
+  }
+  
+  /* 页脚 - 夜间模式（完全透明） */
+  [data-theme="dark"] #footer {
+    background: transparent !important;
+  }
+  
+  /* 夜间模式遮罩透明 */
+  [data-theme="dark"] #footer::before {
+    background: transparent !important;
+  }
+  [data-theme="dark"] #page-header::before {
+    background: transparent !important;
+  }

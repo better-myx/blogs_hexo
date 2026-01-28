@@ -28,7 +28,7 @@ function waitForIconSprite(timeoutMs = 3000) {
     // 清空原有内容，注入 iconfont SVG
     toggleMenu.innerHTML = `
       <svg class="menu-svg-icon faa-tada" aria-hidden="true">
-        <use xlink:href="#icon-zhandian"></use>
+        <use xlink:href="#icon-caidan"></use>
       </svg>
     `;
   

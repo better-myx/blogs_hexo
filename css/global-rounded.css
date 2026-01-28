@@ -162,9 +162,9 @@
   }
   
   /* ============ 18) 页脚圆角 ============ */
-  #footer {
-    border-radius: 20px 20px 0 0; /* 只圆角顶部 */
-  }
+  /* #footer { */
+    /* border-radius: 20px 20px 0 0; 只圆角顶部 */
+  /* } */
   
   /* ============ 19) 移动端优化 ============ */
   @media screen and (max-width: 768px) {

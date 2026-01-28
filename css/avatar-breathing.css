@@ -1,0 +1,58 @@
+/****************** 头像呼吸灯（中等强度：细环更明显） ******************/
+#aside-content .card-widget.card-info .avatar-img{
+    overflow: visible !important;
+  }
+  
+  #aside-content .card-widget.card-info .avatar-img img{
+    border-radius: 50%;
+    display: block;
+  }
+  
+  /* 白天/默认 */
+  :root:not([data-theme="dark"]) #aside-content .card-widget.card-info .avatar-img img{
+    animation: avatar_breath_light 3.2s ease-in-out infinite;
+  }
+  
+  /* 夜间 */
+  [data-theme="dark"] #aside-content .card-widget.card-info .avatar-img img{
+    animation: avatar_breath_dark 3.2s ease-in-out infinite;
+  }
+  
+  /* 白天：用 theme-color（57,197,187）做主色，环更亮一点 */
+  @keyframes avatar_breath_light {
+    0% {
+      box-shadow:
+        0 0 0 2px rgba(57, 197, 187, 0.35),
+        0 0 12px 2px rgba(57, 197, 187, 0.18);
+    }
+    50% {
+      box-shadow:
+        0 0 0 3px rgba(57, 197, 187, 0.55),
+        0 0 22px 4px rgba(57, 197, 187, 0.30);
+    }
+    100% {
+      box-shadow:
+        0 0 0 2px rgba(57, 197, 187, 0.35),
+        0 0 12px 2px rgba(57, 197, 187, 0.18);
+    }
+  }
+  
+  /* 夜间：更偏蓝一点但不刺眼 */
+  @keyframes avatar_breath_dark {
+    0% {
+      box-shadow:
+        0 0 0 2px rgba(102, 204, 255, 0.26),
+        0 0 14px 2px rgba(102, 204, 255, 0.18);
+    }
+    50% {
+      box-shadow:
+        0 0 0 3px rgba(102, 204, 255, 0.40),
+        0 0 26px 4px rgba(102, 204, 255, 0.26);
+    }
+    100% {
+      box-shadow:
+        0 0 0 2px rgba(102, 204, 255, 0.26),
+        0 0 14px 2px rgba(102, 204, 255, 0.18);
+    }
+  }
+  

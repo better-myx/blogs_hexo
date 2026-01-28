@@ -1,0 +1,133 @@
+/* ====================================
+   侧边栏作者卡片：背景 + 布局（最终版）
+   目标：接近参考卡片（凡凡小站）观感
+   - 背景::before
+   - 站名/欢迎语在头像下方
+   - 文章/标签/分类稍微小一点
+   ==================================== */
+
+/* 0) 卡片基础：自适应高度 + 圆角 + 不溢出 */
+#aside-content .card-widget.card-info{
+    min-height: unset !important;
+    height: auto !important;
+    padding: 22px 20px 18px !important;
+  
+    position: relative;
+    overflow: hidden;
+    border-radius: 18px;
+  }
+  
+  /* 1) 背景图用 ::before 承载 */
+  #aside-content .card-widget.card-info::before{
+    content:"";
+    position:absolute;
+    inset:0;
+    background: url(/blogs_hexo/img/person_light.png) no-repeat center top;
+    background-size: 100% auto; /* 竖图：撑满宽度更像参考 */
+    opacity: 1;
+    z-index: 0;
+  }
+  
+  /* 夜间模式背景 */
+  [data-theme="dark"] #aside-content .card-widget.card-info::before{
+    background-image: url(/blogs_hexo/img/person_dark.png);
+  }
+  
+  /* 2) 内容盖在背景上 */
+  #aside-content .card-widget.card-info > *{
+    position: relative;
+    z-index: 1;
+  }
+  
+  /* 3) 顶部区域居中 */
+  #aside-content .card-widget.card-info .author_top{
+    padding-top: 8px !important;
+    text-align: center;
+  }
+  
+  /* 4) 头像区域稍微下压 */
+  #aside-content .card-widget.card-info .card-info-avatar{
+    margin-top: 6px;
+  }
+  
+  /* 5) 站名（精灵探险家） */
+  #aside-content .card-widget.card-info .author-info__name{
+    margin-top: 10px;
+    font-size: 22px !important;
+    font-weight: 900 !important;
+    letter-spacing: 1px;
+    line-height: 1.2;
+  }
+  
+  /* 6) 欢迎语 */
+  #aside-content .card-widget.card-info .author-info__description{
+    margin-top: 6px;
+    margin-bottom: 12px;
+    font-size: 13px !important;
+    font-weight: 600;
+    opacity: .95;
+  }
+  
+  /* 7) 文章/标签/分类：标题和数字稍微小一点点 */
+  #aside-content .card-widget.card-info .card-info-data{
+    margin-top: 8px;
+    margin-bottom: 10px;
+  }
+  
+  #aside-content .card-widget.card-info .card-info-data .headline{
+    font-size: 16px !important;   /* 18 -> 16 */
+    font-weight: 800 !important;
+    letter-spacing: 1px;
+  }
+  
+  #aside-content .card-widget.card-info .card-info-data .length-num{
+    font-size: 24px !important;   /* 28 -> 24 */
+    font-weight: 900 !important;
+    margin-top: 4px;
+    line-height: 1.1;
+  }
+  
+  /* 8) 按钮：更矮（文字+小车） */
+  #aside-content .card-widget.card-info #card-info-btn{
+    display: block;
+    margin-top: 12px;
+  
+    padding: 6px 16px !important;
+    line-height: 1.6 !important;
+  
+    font-weight: 800;
+    letter-spacing: 1px;
+  
+    border-radius: 26px !important;
+    box-shadow: 0 8px 18px rgba(57,197,187,0.25);
+    transition: transform .2s ease, box-shadow .2s ease;
+    text-align: center;
+  }
+  
+  #aside-content .card-widget.card-info #card-info-btn:hover{
+    transform: translateY(-1px);
+    box-shadow: 0 10px 22px rgba(57,197,187,0.32);
+  }
+  
+  /* 小车 svg 尺寸 */
+  #aside-content .card-widget.card-info #card-info-btn .icon{
+    height: 18px !important;
+    width: 18px !important;
+    position: relative;
+    top: 2px !important;
+  }
+  
+  /* 9) 社交区域间距 */
+  #aside-content .card-widget.card-info .card-info-social-icons{
+    margin-top: 12px;
+  }
+  
+  /* 社交图标统一尺寸 */
+  #aside-content .card-widget.card-info svg.social_icon{
+    width: 1.25em;
+    height: 1.25em;
+    vertical-align: -0.15em;
+    fill: currentColor;
+    overflow: hidden;
+  }
+  
