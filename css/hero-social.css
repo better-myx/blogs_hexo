@@ -1,0 +1,41 @@
+/* 打字机字幕下方 4 图标（移动端） */
+@media screen and (max-width: 800px) {
+    #page-header #hero_social_icons{
+      margin-top: 10px;
+    }
+  
+    #page-header #hero_social_icons .hero-social-icons{
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 18px;
+    }
+  
+    #page-header #hero_social_icons .hero-social-icon{
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 6px;
+      border-radius: 12px;
+    }
+  
+    #page-header #hero_social_icons svg.hero_social_svg{
+      width: 28px;
+      height: 28px;
+      fill: currentColor;
+      overflow: hidden;
+    }
+  
+    /* ✅ 如果你想完全仿“凡凡小站”：移动端隐藏原本的 #site_social_icons */
+    #page-header #site_social_icons{
+      display: none !important;
+    }
+  }
+  
+  /* PC 端默认不显示这一排（你要 PC 也显示就删掉这段） */
+  @media screen and (min-width: 801px) {
+    #page-header #hero_social_icons{
+      display: none;
+    }
+  }
+  
