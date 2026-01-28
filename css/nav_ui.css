@@ -1,5 +1,5 @@
 /* =========================================================
-   nav_ui.css (优化版 - 紧凑按钮间距)
+   nav_ui.css (优化版 - 紧凑按钮间距 + 移动端图标调整)
    只管：导航栏布局（三段式）、菜单图标尺寸、右侧工具区、搜索按钮修复
    不要在这里写文章页/目录风车/正文装饰
    ========================================================= */
@@ -44,7 +44,7 @@
     min-width: 0;
   }
 
-  /* 右：工具区靠右 - ⭐ 减小间距从 16px 到 8px */
+  /* 右：工具区靠右 - 减小间距从 16px 到 8px */
   #nav #menus .nav-right-tools {
     display: inline-flex;
     align-items: center;
@@ -71,7 +71,7 @@
 
 /* ============ 2) 移动端：显示汉堡按钮并使用 iconfont ============ */
 @media screen and (max-width: 899px) {
-  /* 右侧工具区显示 - ⭐ 减小移动端间距从 0.8rem 到 0.5rem */
+  /* 右侧工具区显示 - 减小移动端间距从 0.8rem 到 0.5rem */
   #nav #menus .nav-right-tools {
     display: inline-flex;
     align-items: center;
@@ -88,7 +88,7 @@
     cursor: pointer;
   }
 
-  /* 汉堡按钮内的 svg 图标样式 */
+  /* 汉堡按钮内的 svg 图标样式 - ⭐ 缩小尺寸从 1.5em 到 1.3em */
   #toggle-menu .site-page {
     display: inline-flex;
     align-items: center;
@@ -98,13 +98,13 @@
   }
 
   #toggle-menu svg.menu-svg-icon {
-    width: 1.5em !important;
-    height: 1.5em !important;
+    width: 1.3em !important;  /* 从 1.5em 改为 1.3em */
+    height: 1.3em !important;  /* 从 1.5em 改为 1.3em */
     vertical-align: middle;
     display: block;
   }
 
-  /* 让右侧图标大小一致且居中对齐 */
+  /* 让右侧图标大小一致且居中对齐 - ⭐ 同步调整为 1.3em */
   #nav #menus .nav-right-tools a {
     display: inline-flex;
     align-items: center;
@@ -113,8 +113,8 @@
   }
 
   #nav #menus .nav-right-tools svg.menu-svg-icon {
-    width: 1.5em !important;
-    height: 1.5em !important;
+    width: 1.3em !important;  /* 从 1.5em 改为 1.3em */
+    height: 1.3em !important;  /* 从 1.5em 改为 1.3em */
     vertical-align: middle;
     display: block;
   }
@@ -144,10 +144,10 @@
     display: none !important;
   }
 
-  /* 移动端搜索按钮的 svg 尺寸 */
+  /* 移动端搜索按钮的 svg 尺寸 - ⭐ 同步调整为 1.3em */
   #nav #search-button svg.menu-svg-icon {
-    width: 1.5em !important;
-    height: 1.5em !important;
+    width: 1.3em !important;  /* 从 1.5em 改为 1.3em */
+    height: 1.3em !important;  /* 从 1.5em 改为 1.3em */
     vertical-align: middle;
     display: block;
   }
@@ -172,7 +172,7 @@
   font-weight: 500;
 }
 
-/* ============ 4) 右侧工具区图标尺寸统一 - ⭐ 减小左右内边距 ============ */
+/* ============ 4) 右侧工具区图标尺寸统一 - 减小左右内边距 ============ */
 #nav #menus .nav-right-tools a {
   display: inline-flex;
   align-items: center;

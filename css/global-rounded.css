@@ -1,0 +1,198 @@
+/* =========================================================
+   global-rounded.css
+   全局圆角设计 - 为页面元素统一添加圆角，营造柔和现代的视觉风格
+   ========================================================= */
+
+/* ============ 1) 首页文章卡片圆角 ============ */
+#recent-posts .recent-post-item {
+    border-radius: 20px;
+  }
+  
+  /* ============ 2) 侧边栏卡片圆角 ============ */
+  #aside-content .card-widget {
+    border-radius: 20px;
+  }
+  
+  /* ============ 3) 文章页主体内容圆角 ============ */
+  #post {
+    border-radius: 20px;
+  }
+  
+  /* ============ 4) 文章内图片圆角 ============ */
+  #post .container img,
+  .container img {
+    border-radius: 20px;
+  }
+  
+  /* ============ 5) 相关文章卡片圆角 ============ */
+  #post .pagination-related {
+    border-radius: 20px;
+    border: var(--mobufan-border-style) !important;
+  }
+  
+  /* 可选：文章相关推荐卡片圆角（默认注释，按需启用） */
+  /*
+  .relatedPosts > .relatedPosts-list > div {
+    border-radius: 20px;
+  }
+  */
+  
+  /* ============ 6) 文章上下篇导航卡片圆角 ============ */
+  #pagination .pagination-post {
+    border-radius: 20px;
+    border: var(--mobufan-border-style) !important;
+  }
+  
+  /* ============ 7) 代码块圆角 ============ */
+  #post .highlight,
+  #post pre {
+    border-radius: 20px;
+  }
+  
+  /* ============ 8) 页面主体圆角（友链、归档、分类、标签页） ============ */
+  #page,
+  #category,
+  #tag,
+  div#archive {
+    border-radius: 20px;
+  }
+  
+  /* ============ 9) 导航栏子菜单圆角 ============ */
+  .menus_item_child,
+  .site-page.child.faa-parent.animated-hover {
+    border-radius: 20px !important;
+  }
+  
+  .menus_item_child:hover,
+  .site-page.child.faa-parent.animated-hover:hover {
+    border-radius: 20px !important;
+  }
+  
+  /* ============ 10) 搜索框圆角 ============ */
+  .search-dialog,
+  .search-dialog .search-input,
+  #local-search .search-dialog {
+    border-radius: 20px;
+  }
+  
+  /* ============ 11) 评论区圆角（Twikoo） ============ */
+  /* 评论输入框 */
+  #twikoo .tk-comments .tk-submit .tk-row .tk-col .tk-input.el-textarea .el-textarea__inner {
+    border-radius: 15px;
+  }
+  
+  /* 评论预览按钮 */
+  .el-button.tk-preview.el-button--default.el-button--small {
+    border-radius: 10px;
+  }
+  
+  /* 评论发送按钮 */
+  .el-button.tk-send.el-button--primary.el-button--small,
+  .el-button.tk-send.el-button--primary.el-button--small.is-disabled {
+    border-radius: 10px;
+  }
+  
+  /* 评论卡片 */
+  #twikoo .tk-comment {
+    border-radius: 15px;
+  }
+  
+  /* ============ 12) 表格圆角 ============ */
+  .table-container .table-wrap table {
+    border-radius: 10px;
+    overflow: hidden; /* 防止表格内容溢出圆角 */
+  }
+  
+  /* ============ 13) 标签外挂圆角 ============ */
+  #post .container.post-content .folding-tag,
+  #post .container.post-content .folding-tag .content,
+  #post .container.post-content .folding-tag summary {
+    border-radius: 20px !important;
+  }
+  
+  /* note 标签外挂 */
+  #post .note {
+    border-radius: 15px;
+  }
+  
+  /* tabs 标签外挂 */
+  #post .tabs {
+    border-radius: 15px;
+  }
+  
+  /* ============ 14) 其他常见元素圆角 ============ */
+  /* 按钮圆角 */
+  .button,
+  .btn,
+  button {
+    border-radius: 10px;
+  }
+  
+  /* 输入框圆角 */
+  input[type="text"],
+  input[type="email"],
+  input[type="url"],
+  textarea {
+    border-radius: 10px;
+  }
+  
+  /* 通知/提示框圆角 */
+  .notification,
+  .message,
+  .toast {
+    border-radius: 15px;
+  }
+  
+  /* ============ 15) 图库/相册圆角 ============ */
+  .fancybox,
+  .gallery-item,
+  .gallery-item img {
+    border-radius: 15px;
+  }
+  
+  /* ============ 16) 友链卡片圆角 ============ */
+  .site-card,
+  .flink-list .flink-list-item {
+    border-radius: 20px;
+  }
+  
+  /* ============ 17) 时间轴圆角（归档页） ============ */
+  .article-sort-item {
+    border-radius: 15px;
+  }
+  
+  /* ============ 18) 页脚圆角 ============ */
+  #footer {
+    border-radius: 20px 20px 0 0; /* 只圆角顶部 */
+  }
+  
+  /* ============ 19) 移动端优化 ============ */
+  @media screen and (max-width: 768px) {
+    /* 移动端适当减小圆角，避免过度圆润 */
+    #recent-posts .recent-post-item,
+    #aside-content .card-widget,
+    #post,
+    #page {
+      border-radius: 15px;
+    }
+    
+    .container img {
+      border-radius: 12px;
+    }
+  }
+  
+  /* ============ 20) 平滑过渡效果 ============ */
+  /* 为所有圆角元素添加平滑的悬停效果 */
+  #recent-posts .recent-post-item,
+  #aside-content .card-widget,
+  .menus_item_child,
+  .site-page.child,
+  .flink-list .flink-list-item {
+    transition: all 0.3s ease;
+  }
+  
+  #recent-posts .recent-post-item:hover,
+  .flink-list .flink-list-item:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+  }
