@@ -1,37 +1,46 @@
 /* ====================================
-   移动端：侧边栏卡片放到文章列表下面（仿凡凡小站）
+   移动端：仅首页把侧边栏卡片放到文章列表下面（仿凡凡小站）
+   依赖：layout.pug 给首页 #body-wrap 加 class "is-home"
    ==================================== */
 
    @media screen and (max-width: 800px) {
 
-    /* 让内容区变成纵向流：先文章，后侧边栏卡片 */
-    #content-inner {
+    /* ✅ 只在首页生效：先文章，后侧边栏卡片 */
+    #body-wrap.is-home #content-inner {
       display: flex !important;
       flex-direction: column !important;
     }
   
     /* 文章列表在上 */
-    #recent-posts {
+    #body-wrap.is-home #recent-posts {
       order: 1 !important;
     }
   
     /* 侧边栏卡片容器在下，并铺满 */
-    #aside-content {
+    #body-wrap.is-home #aside-content {
+      display: block !important;      /* 防止被其它样式隐藏 */
       order: 2 !important;
       width: 100% !important;
       margin-top: 16px !important;
     }
   
-    /* 取消 aside 的“粘性/固定”之类效果（避免手机端怪位置） */
-    #aside-content .sticky_layout,
-    #aside-content .sticky_layout .sticky_layout__content {
+    /* 取消 aside 的粘性/固定效果（仅首页） */
+    #body-wrap.is-home #aside-content .sticky_layout,
+    #body-wrap.is-home #aside-content .sticky_layout .sticky_layout__content {
       position: static !important;
       top: auto !important;
     }
   
-    /* 每张卡片的间距稍微舒服点 */
-    #aside-content .card-widget {
+    /* 每张卡片间距 */
+    #body-wrap.is-home #aside-content .card-widget {
       margin-top: 16px !important;
+    }
+  
+    /* ✅ 非首页：移动端不要把 aside “挪到底部”
+       这里直接隐藏掉移动端非首页的 #aside-content（符合你需求）
+     */
+    #body-wrap:not(.is-home) #aside-content {
+      display: none !important;
     }
   }
   
