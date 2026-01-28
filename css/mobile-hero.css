@@ -1,0 +1,24 @@
+/* ====================================
+   移动端：顶部封面背景图（page-header）专用
+   ==================================== */
+
+   @media (max-width: 768px) {
+    /* 让顶部封面有背景图（很多时候移动端被主题/透明样式覆盖了） */
+    #page-header {
+      background-image: url(/blogs_hexo/img/mobileday-bg.png) !important;
+      background-size: cover !important;
+      background-position: center top !important;
+      background-repeat: no-repeat !important;
+    }
+  
+    /* 夜间模式：替换成夜间移动端背景 */
+    [data-theme="dark"] #page-header {
+      background-image: url(/blogs_hexo/img/mobilenight-bg.webp) !important;
+    }
+  
+    /* 有些透明/毛玻璃会盖住背景：把 page-header 的 overlay 稍微变淡 */
+    #page-header::before {
+      opacity: 0.25 !important;
+    }
+  }
+  
