@@ -1,202 +1,202 @@
 /* =========================================================
-   nav_ui.css
+   nav_ui.css (优化版 - 紧凑按钮间距)
    只管：导航栏布局（三段式）、菜单图标尺寸、右侧工具区、搜索按钮修复
    不要在这里写文章页/目录风车/正文装饰
    ========================================================= */
 
 /* ============ 1) 三段式导航布局（桌面端） ============ */
 @media screen and (min-width: 900px) {
-    #nav {
-      display: flex;
-      align-items: center;
-    }
+  #nav {
+    display: flex;
+    align-items: center;
+  }
 
-    /* 左：标题区 */
-    #nav #blog-info {
-      display: flex;
-      align-items: center;
-      flex: 0 0 auto;
-      margin-right: 12px;
-      min-width: 0;
-    }
+  /* 左：标题区 */
+  #nav #blog-info {
+    display: flex;
+    align-items: center;
+    flex: 0 0 auto;
+    margin-right: 12px;
+    min-width: 0;
+  }
 
-    /* 增大站点标题字体 */
-    #nav #blog-info .site-name {
-      font-size: 1.3em;
-      font-weight: 600;
-    }
+  /* 增大站点标题字体 */
+  #nav #blog-info .site-name {
+    font-size: 1.3em;
+    font-weight: 600;
+  }
 
-    /* 中：菜单 + 右侧工具的容器 */
-    #nav #menus {
-      display: flex;
-      align-items: center;
-      flex: 1 1 auto;
-      min-width: 0;
-      width: 100%;
-    }
+  /* 中：菜单 + 右侧工具的容器 */
+  #nav #menus {
+    display: flex;
+    align-items: center;
+    flex: 1 1 auto;
+    min-width: 0;
+    width: 100%;
+  }
 
-    /* 中：主题生成的菜单项容器（menu_item.pug 生成 .menus_items） */
-    #nav #menus .menus_items {
-      display: flex !important;
-      align-items: center;
-      justify-content: center; /* 中间菜单居中 */
-      flex: 1 1 auto;
-      min-width: 0;
-    }
+  /* 中：主题生成的菜单项容器（menu_item.pug 生成 .menus_items） */
+  #nav #menus .menus_items {
+    display: flex !important;
+    align-items: center;
+    justify-content: center; /* 中间菜单居中 */
+    flex: 1 1 auto;
+    min-width: 0;
+  }
 
-    /* 右：工具区靠右 */
-    #nav #menus .nav-right-tools {
-      display: inline-flex;
-      align-items: center;
-      gap: 16px;
-      flex: 0 0 auto;
-      margin-left: 16px;
-      white-space: nowrap;
-    }
+  /* 右：工具区靠右 - ⭐ 减小间距从 16px 到 8px */
+  #nav #menus .nav-right-tools {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    flex: 0 0 auto;
+    margin-left: 16px;
+    white-space: nowrap;
+  }
 
-    /* 桌面端隐藏汉堡按钮 - 使用更强的选择器 */
-    #nav #menus .nav-right-tools #toggle-menu,
-    #nav #toggle-menu {
-      display: none !important;
-      visibility: hidden !important;
-      opacity: 0 !important;
-      pointer-events: none !important;
-    }
+  /* 桌面端隐藏汉堡按钮 - 使用更强的选择器 */
+  #nav #menus .nav-right-tools #toggle-menu,
+  #nav #toggle-menu {
+    display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
+  }
 
-    /* 修正搜索按钮与右边的间距 */
-    #nav #search-button {
-      margin-right: 10px !important;
-    }
+  /* 修正搜索按钮与右边的间距 */
+  #nav #search-button {
+    margin-right: 0 !important;
+  }
 }
 
 /* ============ 2) 移动端：显示汉堡按钮并使用 iconfont ============ */
 @media screen and (max-width: 899px) {
-    /* 右侧工具区显示 */
-    #nav #menus .nav-right-tools {
-      display: inline-flex;
-      align-items: center;
-      justify-content: flex-end;
-      gap: 0.8rem;
-      flex: 0 0 auto;
-    }
-
-    /* 显示汉堡菜单按钮（移动端） */
-    #toggle-menu {
-      display: inline-flex !important;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-    }
-
-    /* 汉堡按钮内的 svg 图标样式 */
-    #toggle-menu .site-page {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      padding: 0;
-      margin: 0;
-    }
-
-    #toggle-menu svg.menu-svg-icon {
-      width: 1.5em !important;
-      height: 1.5em !important;
-      vertical-align: middle;
-      display: block;
-    }
-
-    /* 让右侧图标大小一致且居中对齐 */
-    #nav #menus .nav-right-tools a {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      padding: 0;
-    }
-
-    #nav #menus .nav-right-tools svg.menu-svg-icon {
-      width: 1.5em !important;
-      height: 1.5em !important;
-      vertical-align: middle;
-      display: block;
-    }
-
-    /* 修正：搜索按钮在移动端显示 */
-    #nav #search-button,
-    #nav #search-button .site-page.social-icon.search {
-      display: inline-flex !important;
-      align-items: center;
-      justify-content: center;
-      width: auto !important;
-      height: auto !important;
-      padding: 0 !important;
-      margin: 0 !important;
-      background: none !important;
-      box-shadow: none !important;
-    }
-
-    /* 关闭搜索按钮的伪元素 */
-    #nav #search-button::before,
-    #nav #search-button::after,
-    #nav #search-button a.search::before,
-    #nav #search-button a.search::after,
-    #nav #search-button .search::before,
-    #nav #search-button .search::after {
-      content: none !important;
-      display: none !important;
-    }
-
-    /* 移动端搜索按钮的 svg 尺寸 */
-    #nav #search-button svg.menu-svg-icon {
-      width: 1.5em !important;
-      height: 1.5em !important;
-      vertical-align: middle;
-      display: block;
-    }
-}
-
-/* ============ 3) 菜单 iconfont 图标尺寸（给 menu_icons_injector.js 用） ============ */
-#nav .menus_items svg.menu-svg-icon {
-    width: 1.4em;
-    height: 1.4em;
-    vertical-align: -0.2em;
-    overflow: hidden;
+  /* 右侧工具区显示 - ⭐ 减小移动端间距从 0.8rem 到 0.5rem */
+  #nav #menus .nav-right-tools {
+    display: inline-flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 0.5rem;
     flex: 0 0 auto;
-    margin-right: .35em;
-}
+  }
 
-/* 让菜单链接内图标+文字对齐 */
-#nav .menus_items .menus_item > a,
-#nav .menus_items .menus_item_child a {
-    display: inline-flex;
-    align-items: center;
-    font-size: 1.05em;
-    font-weight: 500;
-}
-
-/* ============ 4) 右侧工具区图标尺寸统一 ============ */
-#nav #menus .nav-right-tools a {
-    display: inline-flex;
-    align-items: center;
-    padding: 0 .3rem;
-}
-
-#nav #menus .nav-right-tools svg.menu-svg-icon {
-    width: 1.6em;
-    height: 1.6em;
-    vertical-align: -0.15em;
-    overflow: hidden;
-}
-
-/* ============ 5) 修复：搜索按钮被主题伪元素/样式撑大 ============ */
-#nav #search-button,
-#nav #search-button .site-page.social-icon.search {
+  /* 显示汉堡菜单按钮（移动端） */
+  #toggle-menu {
     display: inline-flex !important;
     align-items: center;
+    justify-content: center;
+    cursor: pointer;
+  }
+
+  /* 汉堡按钮内的 svg 图标样式 */
+  #toggle-menu .site-page {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    margin: 0;
+  }
+
+  #toggle-menu svg.menu-svg-icon {
+    width: 1.5em !important;
+    height: 1.5em !important;
+    vertical-align: middle;
+    display: block;
+  }
+
+  /* 让右侧图标大小一致且居中对齐 */
+  #nav #menus .nav-right-tools a {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+  }
+
+  #nav #menus .nav-right-tools svg.menu-svg-icon {
+    width: 1.5em !important;
+    height: 1.5em !important;
+    vertical-align: middle;
+    display: block;
+  }
+
+  /* 修正：搜索按钮在移动端显示 */
+  #nav #search-button,
+  #nav #search-button .site-page.social-icon.search {
+    display: inline-flex !important;
+    align-items: center;
+    justify-content: center;
     width: auto !important;
     height: auto !important;
     padding: 0 !important;
     margin: 0 !important;
     background: none !important;
     box-shadow: none !important;
+  }
+
+  /* 关闭搜索按钮的伪元素 */
+  #nav #search-button::before,
+  #nav #search-button::after,
+  #nav #search-button a.search::before,
+  #nav #search-button a.search::after,
+  #nav #search-button .search::before,
+  #nav #search-button .search::after {
+    content: none !important;
+    display: none !important;
+  }
+
+  /* 移动端搜索按钮的 svg 尺寸 */
+  #nav #search-button svg.menu-svg-icon {
+    width: 1.5em !important;
+    height: 1.5em !important;
+    vertical-align: middle;
+    display: block;
+  }
+}
+
+/* ============ 3) 菜单 iconfont 图标尺寸（给 menu_icons_injector.js 用） ============ */
+#nav .menus_items svg.menu-svg-icon {
+  width: 1.4em;
+  height: 1.4em;
+  vertical-align: -0.2em;
+  overflow: hidden;
+  flex: 0 0 auto;
+  margin-right: .35em;
+}
+
+/* 让菜单链接内图标+文字对齐 */
+#nav .menus_items .menus_item > a,
+#nav .menus_items .menus_item_child a {
+  display: inline-flex;
+  align-items: center;
+  font-size: 1.05em;
+  font-weight: 500;
+}
+
+/* ============ 4) 右侧工具区图标尺寸统一 - ⭐ 减小左右内边距 ============ */
+#nav #menus .nav-right-tools a {
+  display: inline-flex;
+  align-items: center;
+  padding: 0 .15rem; /* 从 .3rem 改为 .15rem */
+}
+
+#nav #menus .nav-right-tools svg.menu-svg-icon {
+  width: 1.6em;
+  height: 1.6em;
+  vertical-align: -0.15em;
+  overflow: hidden;
+}
+
+/* ============ 5) 修复：搜索按钮被主题伪元素/样式撑大 ============ */
+#nav #search-button,
+#nav #search-button .site-page.social-icon.search {
+  display: inline-flex !important;
+  align-items: center;
+  width: auto !important;
+  height: auto !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  background: none !important;
+  box-shadow: none !important;
 }
 
 /* 关掉伪元素横线/背景 */
@@ -208,13 +208,13 @@
 #nav #search-button .search::after,
 #nav #search-button .site-page.social-icon.search::before,
 #nav #search-button .site-page.social-icon.search::after {
-    content: none !important;
-    display: none !important;
+  content: none !important;
+  display: none !important;
 }
 
 /* 搜索按钮 svg 尺寸 */
 #nav #search-button svg.menu-svg-icon {
-    width: 1.6em !important;
-    height: 1.6em !important;
-    vertical-align: -0.15em;
+  width: 1.6em !important;
+  height: 1.6em !important;
+  vertical-align: -0.15em;
 }
