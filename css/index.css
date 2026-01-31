@@ -6279,14 +6279,14 @@ figure.highlight pre .javascript .function {
   height: 100%;
   z-index: -999;
   pointer-events: none;
-  background: url(/blogs_hexo/img/pc_light.png);
+  background: url(https://img.66686666.xyz/img/common/pc_light.png);
   background-attachment: local;
   background-position: center;
   background-size: cover;
   background-repeat: no-repeat;
 }
 [data-theme="dark"] #web_bg {
-  background: url(/blogs_hexo/img/pc_dark.webp);
+  background: url(https://img.66686666.xyz/img/common/pc_dark.webp);
   background-attachment: local;
   background-position: center;
   background-size: cover;
@@ -6294,14 +6294,14 @@ figure.highlight pre .javascript .function {
 }
 @media screen and (max-width: 800px) {
   #web_bg {
-    background: url(/blogs_hexo/img/mb_light.png) !important;
+    background: url(https://img.66686666.xyz/img/common/mb_light.png) !important;
     background-attachment: local !important;
     background-position: center !important;
     background-size: cover !important;
     background-repeat: no-repeat !important;
   }
   [data-theme="dark"] #web_bg {
-    background: url(/blogs_hexo/img/mb_dark.webp) !important;
+    background: url(https://img.66686666.xyz/img/common/mb_dark.webp) !important;
     background-attachment: local !important;
     background-position: center !important;
     background-size: cover !important;
@@ -8546,14 +8546,14 @@ blockquote.pullquote.right {
   height: 100%;
   z-index: -999;
   pointer-events: none;
-  background: url(/blogs_hexo/img/pc_light.png);
+  background: url(https://img.66686666.xyz/img/common/pc_light.png);
   background-attachment: local;
   background-position: center;
   background-size: cover;
   background-repeat: no-repeat;
 }
 [data-theme="dark"] #web_bg {
-  background: url(/blogs_hexo/img/pc_dark.webp);
+  background: url(https://img.66686666.xyz/img/common/pc_dark.webp);
   background-attachment: local;
   background-position: center;
   background-size: cover;
@@ -8561,14 +8561,14 @@ blockquote.pullquote.right {
 }
 @media screen and (max-width: 800px) {
   #web_bg {
-    background: url(/blogs_hexo/img/mb_light.png) !important;
+    background: url(https://img.66686666.xyz/img/common/mb_light.png) !important;
     background-attachment: local !important;
     background-position: center !important;
     background-size: cover !important;
     background-repeat: no-repeat !important;
   }
   [data-theme="dark"] #web_bg {
-    background: url(/blogs_hexo/img/mb_dark.webp) !important;
+    background: url(https://img.66686666.xyz/img/common/mb_dark.webp) !important;
     background-attachment: local !important;
     background-position: center !important;
     background-size: cover !important;

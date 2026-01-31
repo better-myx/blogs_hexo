@@ -20,7 +20,7 @@
     content:"";
     position:absolute;
     inset:0;
-    background: url(/blogs_hexo/img/person_light.png) no-repeat center top;
+    background: url(https://img.66686666.xyz/img/common/person_light.png) no-repeat center top;
     background-size: 100% auto; /* 竖图：撑满宽度 */
     opacity: 1;
     z-index: 0;
@@ -28,7 +28,7 @@
   
   /* 夜间模式背景 */
   [data-theme="dark"] #aside-content .card-widget.card-info::before{
-    background-image: url(/blogs_hexo/img/person_dark.png);
+    background-image: url(https://img.66686666.xyz/img/common/person_dark.png);
   }
   
   /* 2) 内容盖在背景上 */
