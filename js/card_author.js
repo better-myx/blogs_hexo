@@ -1,6 +1,5 @@
 // =====================================================
-// card_author_enhance.js
-// 目标：只增强“作者卡片”（你已经改了 card_author.pug 的结构）
+// card_author.js
 // - 站名：精灵探险家
 // - 欢迎语：欢迎来到 精灵探险家🍭🍭🍭
 // - Articles/Tags/Categories -> 中文（只改作者卡片）

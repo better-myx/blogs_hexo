@@ -1,9 +1,7 @@
 /* ====================================
    侧边栏作者卡片：背景 + 布局（最终版）
-   目标：接近参考卡片（凡凡小站）观感
    - 背景::before
    - 站名/欢迎语在头像下方
-   - 文章/标签/分类稍微小一点
    ==================================== */
 
 /* 0) 卡片基础：自适应高度 + 圆角 + 不溢出 */
@@ -23,7 +21,7 @@
     position:absolute;
     inset:0;
     background: url(/blogs_hexo/img/person_light.png) no-repeat center top;
-    background-size: 100% auto; /* 竖图：撑满宽度更像参考 */
+    background-size: 100% auto; /* 竖图：撑满宽度 */
     opacity: 1;
     z-index: 0;
   }

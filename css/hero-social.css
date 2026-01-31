@@ -26,7 +26,7 @@
       overflow: hidden;
     }
   
-    /* ✅ 如果你想完全仿“凡凡小站”：移动端隐藏原本的 #site_social_icons */
+    /* ✅ 隐藏默认的github图标：移动端隐藏原本的 #site_social_icons */
     #page-header #site_social_icons{
       display: none !important;
     }
