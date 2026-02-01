@@ -7,10 +7,13 @@
    @media screen and (max-width: 800px) {
 
     /* ✅ 非首页：直接隐藏 aside（解决“所有页面底部都有右侧栏”） */
-    #body-wrap:not(.is-home) #aside-content {
+    #body-wrap:not(.is-home) #aside-content .card-widget:not(#card-toc){
       display: none !important;
     }
-  
+    /* 确保目录卡片可用 */
+    #body-wrap:not(.is-home) #aside-content #card-toc {
+      display: block !important;
+    } 
     /* ✅ 首页：允许显示 aside */
     #body-wrap.is-home #aside-content {
       display: block !important;
