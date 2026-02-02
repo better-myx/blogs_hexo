@@ -12,12 +12,16 @@
       const w = win(), t = tray();
       if (!w) return;
       w.classList.remove("hidden");
+      // ✅ 手机端默认全屏（配合 CSS @media）
+      const isMobile = window.matchMedia && window.matchMedia("(max-width: 600px)").matches;
+      if (isMobile) w.classList.add("is-max");
+
       w.setAttribute("aria-hidden", "false");
       if (t) t.classList.add("hidden");
   
       // 默认打开居中（清掉可能残留的 left/top/transform）
       const c = card();
-      if (c && !w.classList.contains("is-max")) {
+      if (c && !w.classList.contains("is-max") && !isMobile) {
         c.style.position = "fixed";
         c.style.left = "50%";
         c.style.top = "55%";

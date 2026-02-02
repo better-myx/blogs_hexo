@@ -328,3 +328,73 @@ html[data-theme="dark"] #beautify-tray button{
 #beautify-window .bw-r-nw{ left: 0; top: 0; width: 12px; height: 12px; cursor: nwse-resize; }
 #beautify-window .bw-r-se{ right: 0; bottom: 0; width: 14px; height: 14px; cursor: nwse-resize; }
 #beautify-window .bw-r-sw{ left: 0; bottom: 0; width: 14px; height: 14px; cursor: nesw-resize; }
+
+/* =========================
+   ✅ Mobile responsive
+   ========================= */
+
+/* 手机端：面板直接全屏（避免 min-width 把布局撑爆） */
+@media (max-width: 600px){
+    #beautify-window .bw-card{
+      left: 0 !important;
+      top: 0 !important;
+      transform: none !important;
+  
+      width: 100vw !important;
+      height: 100dvh !important;         /* 比 100vh 更适配手机浏览器 */
+      max-width: none !important;
+      max-height: none !important;
+  
+      min-width: 0 !important;           /* ✅ 取消你原来的 560px 最小宽 */
+      min-height: 0 !important;          /* ✅ 取消你原来的 380px 最小高 */
+      border-radius: 0 !important;
+    }
+  
+    /* iOS 安全区适配（可选但推荐） */
+    #beautify-window .bw-titlebar{
+      padding-top: env(safe-area-inset-top);
+      height: calc(48px + env(safe-area-inset-top));
+    }
+  
+    #beautify-window .bw-body{
+      padding: 14px 12px 16px;
+      height: calc(100% - (48px + env(safe-area-inset-top)));
+      -webkit-overflow-scrolling: touch;
+    }
+  
+    /* 字体按钮：两列自适应，不允许 min-width 150 把它撑出屏幕 */
+    #beautify-window .bw-font{
+      min-width: 0 !important;
+      width: calc(50% - 6px);            /* 两列 */
+      height: 50px;
+      font-size: 14px;
+      padding: 0 10px;
+    }
+  
+    /* 显示偏好：移动端单列（你原本 820px 才单列，手机更需要） */
+    #beautify-window .bw-grid{
+      grid-template-columns: 1fr !important;
+    }
+  
+    /* 开关稍微缩小点更像手机 UI */
+    #beautify-window .bw-switch{
+      width: 52px;
+      height: 28px;
+    }
+    #beautify-window .bw-switch .bw-knob{
+      width: 22px;
+      height: 22px;
+    }
+  }
+  
+  /* 更小的屏幕：字体按钮改成一列，避免太挤 */
+  @media (max-width: 360px){
+    #beautify-window .bw-font{
+      width: 100%;
+    }
+  }
+  
+  @media (max-width: 600px){
+    #beautify-window .bw-r{ display:none !important; }
+  }
+  
