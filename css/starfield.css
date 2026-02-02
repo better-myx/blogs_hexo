@@ -5,11 +5,12 @@
     width: 100%;
     height: 100%;
     pointer-events: none;
-    z-index: -1;        /* ✅ 不用负数 */
+    z-index: -1;
   }
   
-  html[data-theme="dark"] #starfield{
-    display: block;
+  /* ✅ 夜间 + 开关开启 才显示 */
+  html[data-theme="dark"][data-starfield="on"] #starfield{
+    display:block;
   }
   
   html[data-theme="light"] #starfield{

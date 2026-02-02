@@ -1,0 +1,32 @@
+/* source/css/beautify_fonts.css */
+@font-face{
+  font-family:"ZhuZiAWan";
+  src:url("/blogs_hexo/fonts/ZhuZiAWan.woff2") format("woff2");
+  font-display:swap;
+}
+@font-face{
+  font-family:"TTQHB";
+  src:url("/blogs_hexo/fonts/TTQHB.woff2") format("woff2");
+  font-display:swap;
+}
+@font-face{
+  font-family:"XiaoShiTou";
+  src:url("/blogs_hexo/fonts/XiaoShiTou.woff2") format("woff2");
+  font-display:swap;
+}
+@font-face{
+  font-family:"Heavy";
+  src:url("/blogs_hexo/fonts/Heavy.woff2") format("woff2");
+  font-display:swap;
+}
+@font-face{
+  font-family:"dingliezhuhai";
+  src:url("/blogs_hexo/fonts/dingliezhuhaifont.woff2") format("woff2");
+  font-display:swap;
+}
+
+/* ✅ 兜底：确保 body 真吃变量 */
+body{
+  font-family: var(--global-font) !important;
+}
+

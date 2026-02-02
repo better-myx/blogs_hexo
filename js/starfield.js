@@ -1,3 +1,4 @@
+// source/js/starfield.js
 (() => {
     const isMobile = /(phone|pad|pod|iPhone|iPod|ios|iPad|Android|Mobile|BlackBerry|IEMobile|MQQBrowser|JUC|Fennec|wOSBrowser|BrowserNG|WebOS|Symbian|Windows Phone)/i.test(navigator.userAgent);
   
@@ -13,15 +14,18 @@
       firstFrame: true
     };
   
-    function isDarkMode() {
-      return document.documentElement.getAttribute("data-theme") === "dark";
+    function isStarfieldEnabled() {
+      return document.documentElement.getAttribute("data-starfield") !== "off"; // 默认当作 on
+    }
+  
+    function shouldRun() {
+      return document.documentElement.getAttribute("data-theme") === "dark" && isStarfieldEnabled();
     }
   
     function resize() {
       if (!STATE.canvas) return;
       STATE.w = window.innerWidth;
       STATE.h = window.innerHeight;
-    //   STATE.count = Math.floor(STATE.w * 0.216);
       STATE.count = Math.floor(STATE.w * (isMobile ? 0.12 : 0.216));
       STATE.canvas.width = STATE.w;
       STATE.canvas.height = STATE.h;
@@ -131,7 +135,7 @@
     function drawFrame() {
       if (!STATE.running) return;
   
-      if (!isDarkMode()) {
+      if (!shouldRun()) {
         stop();
         return;
       }
@@ -151,8 +155,7 @@
     }
   
     function start() {
-    //   if (isMobile) return;
-      if (!isDarkMode()) return;
+      if (!shouldRun()) return;
   
       if (!STATE.canvas || !STATE.ctx) {
         if (!ensureCanvas()) return;
@@ -185,17 +188,17 @@
         if (STATE.running) initStars();
       });
   
-      // 监听 data-theme 变化（开关星空）
+      // ✅ 监听 data-theme 和 data-starfield（开关）
       const mo = new MutationObserver(() => {
-        if (isDarkMode()) start();
+        if (shouldRun()) start();
         else stop();
       });
-      mo.observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
+      mo.observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme", "data-starfield"] });
     }
   
     function boot() {
       bindEventsOnce();
-      if (isDarkMode()) start();
+      if (shouldRun()) start();
       else stop();
     }
   

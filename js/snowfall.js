@@ -1,3 +1,4 @@
+// source/js/snowfall.js
 (() => {
     const isMobile = /(phone|pad|pod|iPhone|iPod|ios|iPad|Android|Mobile|BlackBerry|IEMobile|MQQBrowser|JUC|Fennec|wOSBrowser|BrowserNG|WebOS|Symbian|Windows Phone)/i.test(navigator.userAgent);
   
@@ -10,15 +11,14 @@
       opacity: 0.7,
       stepsize: 0.5
     };
-    // ✅ 移动端降配（推荐）
-  if (isMobile) {
+  
+    if (isMobile) {
       SETTINGS.flakeCount = 22;
       SETTINGS.minDist = 90;
       SETTINGS.speed = 0.35;
       SETTINGS.size = 1.2;
       SETTINGS.stepsize = 0.35;
-    };
-  
+    }
   
     const STATE = {
       rafId: null,
@@ -30,8 +30,12 @@
       mouseY: -100
     };
   
-    function isLightMode() {
-      return document.documentElement.getAttribute("data-theme") === "light";
+    function isSnowfallEnabled() {
+      return document.documentElement.getAttribute("data-snowfall") !== "off"; // 默认当作 on
+    }
+  
+    function shouldRun() {
+      return document.documentElement.getAttribute("data-theme") === "light" && isSnowfallEnabled();
     }
   
     function ensureCanvas() {
@@ -88,8 +92,7 @@
     function tick() {
       if (!STATE.running) return;
   
-      // 如果不在白天模式，停止
-      if (!isLightMode()) {
+      if (!shouldRun()) {
         stop();
         return;
       }
@@ -136,17 +139,15 @@
     }
   
     function start() {
-    //   if (isMobile) return;
-      if (!isLightMode()) return;
+      if (!shouldRun()) return;
   
       if (!STATE.canvas || !STATE.ctx) {
         if (!ensureCanvas()) return;
       }
   
-      // 防止重复 start
       if (STATE.running) return;
-  
       STATE.running = true;
+  
       initFlakes();
       STATE.rafId = requestAnimationFrame(tick);
     }
@@ -155,12 +156,12 @@
       STATE.running = false;
       if (STATE.rafId) cancelAnimationFrame(STATE.rafId);
       STATE.rafId = null;
+  
       if (STATE.ctx && STATE.canvas) {
         STATE.ctx.clearRect(0, 0, STATE.canvas.width, STATE.canvas.height);
       }
     }
   
-    // 绑定事件（只绑一次）
     function bindEventsOnce() {
       if (window.__snowfallBound) return;
       window.__snowfallBound = true;
@@ -169,37 +170,37 @@
         STATE.mouseX = e.clientX;
         STATE.mouseY = e.clientY;
       });
-      document.addEventListener("touchmove", (e) => {
-        const t = e.touches && e.touches[0];
-        if (!t) return;
-        STATE.mouseX = t.clientX;
-        STATE.mouseY = t.clientY;
-      }, { passive: true });
-      
+  
+      document.addEventListener(
+        "touchmove",
+        (e) => {
+          const t = e.touches && e.touches[0];
+          if (!t) return;
+          STATE.mouseX = t.clientX;
+          STATE.mouseY = t.clientY;
+        },
+        { passive: true }
+      );
   
       window.addEventListener("resize", () => {
         resizeCanvas();
       });
   
-      // 监听 data-theme 变化（开关雪花）
+      // ✅ 监听 data-theme 和 data-snowfall（开关）
       const mo = new MutationObserver(() => {
-        if (isLightMode()) start();
+        if (shouldRun()) start();
         else stop();
       });
-      mo.observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
+      mo.observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme", "data-snowfall"] });
     }
   
     function boot() {
       bindEventsOnce();
-      // 首次按当前模式启动/停止
-      if (isLightMode()) start();
+      if (shouldRun()) start();
       else stop();
     }
   
-    // 初次加载
     boot();
-  
-    // PJAX：每次页面切换后再 boot（不会重复绑定/重复 raf）
     document.addEventListener("pjax:complete", boot);
   })();
   
