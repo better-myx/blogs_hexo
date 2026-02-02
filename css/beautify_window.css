@@ -330,71 +330,49 @@ html[data-theme="dark"] #beautify-tray button{
 #beautify-window .bw-r-sw{ left: 0; bottom: 0; width: 14px; height: 14px; cursor: nesw-resize; }
 
 /* =========================
-   ✅ Mobile responsive
+   ✅ Mobile: centered small window (not fullscreen by default)
    ========================= */
-
-/* 手机端：面板直接全屏（避免 min-width 把布局撑爆） */
-@media (max-width: 600px){
+   @media (max-width: 600px){
     #beautify-window .bw-card{
-      left: 0 !important;
-      top: 0 !important;
-      transform: none !important;
+      /* ✅ 小窗居中（仍然走你默认 50%/55% 居中逻辑） */
+      width: min(92vw, 520px);
+      height: min(72vh, 520px);
   
-      width: 100vw !important;
-      height: 100dvh !important;         /* 比 100vh 更适配手机浏览器 */
-      max-width: none !important;
-      max-height: none !important;
+      max-width: calc(100vw - 18px);
+      max-height: calc(100vh - 18px);
   
-      min-width: 0 !important;           /* ✅ 取消你原来的 560px 最小宽 */
-      min-height: 0 !important;          /* ✅ 取消你原来的 380px 最小高 */
-      border-radius: 0 !important;
+      /* ✅ 覆盖桌面最小尺寸限制，否则会撑爆手机屏幕 */
+      min-width: 0 !important;
+      min-height: 0 !important;
+  
+      border-radius: 16px;
     }
   
-    /* iOS 安全区适配（可选但推荐） */
+    /* ✅ 触摸拖动更顺：标题栏禁用浏览器默认手势 */
     #beautify-window .bw-titlebar{
-      padding-top: env(safe-area-inset-top);
-      height: calc(48px + env(safe-area-inset-top));
+      touch-action: none;
     }
   
-    #beautify-window .bw-body{
-      padding: 14px 12px 16px;
-      height: calc(100% - (48px + env(safe-area-inset-top)));
-      -webkit-overflow-scrolling: touch;
-    }
+    /* ✅ 手机上不建议拉伸手柄（容易误触） */
+    #beautify-window .bw-r{ display:none !important; }
   
-    /* 字体按钮：两列自适应，不允许 min-width 150 把它撑出屏幕 */
+    /* 字体按钮：两列不溢出 */
     #beautify-window .bw-font{
       min-width: 0 !important;
-      width: calc(50% - 6px);            /* 两列 */
+      width: calc(50% - 6px);
       height: 50px;
       font-size: 14px;
       padding: 0 10px;
     }
   
-    /* 显示偏好：移动端单列（你原本 820px 才单列，手机更需要） */
+    /* 显示偏好：手机单列更舒服 */
     #beautify-window .bw-grid{
       grid-template-columns: 1fr !important;
     }
-  
-    /* 开关稍微缩小点更像手机 UI */
-    #beautify-window .bw-switch{
-      width: 52px;
-      height: 28px;
-    }
-    #beautify-window .bw-switch .bw-knob{
-      width: 22px;
-      height: 22px;
-    }
   }
   
-  /* 更小的屏幕：字体按钮改成一列，避免太挤 */
+  /* 超小屏：字体按钮一列 */
   @media (max-width: 360px){
-    #beautify-window .bw-font{
-      width: 100%;
-    }
-  }
-  
-  @media (max-width: 600px){
-    #beautify-window .bw-r{ display:none !important; }
+    #beautify-window .bw-font{ width: 100%; }
   }
   

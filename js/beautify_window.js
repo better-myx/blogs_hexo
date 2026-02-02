@@ -12,16 +12,13 @@
       const w = win(), t = tray();
       if (!w) return;
       w.classList.remove("hidden");
-      // ✅ 手机端默认全屏（配合 CSS @media）
-      const isMobile = window.matchMedia && window.matchMedia("(max-width: 600px)").matches;
-      if (isMobile) w.classList.add("is-max");
-
+      
       w.setAttribute("aria-hidden", "false");
       if (t) t.classList.add("hidden");
   
       // 默认打开居中（清掉可能残留的 left/top/transform）
       const c = card();
-      if (c && !w.classList.contains("is-max") && !isMobile) {
+      if (c && !w.classList.contains("is-max")) {
         c.style.position = "fixed";
         c.style.left = "50%";
         c.style.top = "55%";
@@ -88,57 +85,101 @@
       else maximize();
     }
   
-    // ✅ Windows 策略：最大化时拖标题栏 -> 自动还原并跟随鼠标
+    // ✅ Windows策略：最大化时拖标题栏 -> 自动还原并跟随指针（支持手机触摸）
     function enableDrag() {
-      const bar = document.getElementById("bw-titlebar");
-      const c = card();
-      if (!bar || !c) return;
-      if (bar.dataset.dragBound) return;
-      bar.dataset.dragBound = "1";
-  
-      let dragging = false;
-      let startX = 0, startY = 0;
-      let startLeft = 0, startTop = 0;
-  
-      bar.addEventListener("mousedown", (e) => {
-        const w = win();
-        if (!w) return;
-  
-        // 如果是最大化，先还原到上一次的窗口大小（没有则用默认）
-        if (w.classList.contains("is-max")) {
-          const before = STATE.prevRect || { left: (window.innerWidth-920)/2, top: (window.innerHeight-560)/2, width: 920, height: 560 };
-          restore();
-  
-          // 让鼠标位于标题栏的相对位置（接近 Windows）
-          const ratioX = e.clientX / window.innerWidth;
-          const newLeft = Math.max(0, Math.min(window.innerWidth - before.width, e.clientX - before.width * ratioX));
-          const newTop = Math.max(0, Math.min(window.innerHeight - before.height, e.clientY - 16));
-  
-          applyRect({ left: newLeft, top: newTop, width: before.width, height: before.height });
+        const bar = document.getElementById("bw-titlebar");
+        const c = card();
+        if (!bar || !c) return;
+        if (bar.dataset.dragBound) return;
+        bar.dataset.dragBound = "1";
+      
+        let dragging = false;
+        let pointerId = null;
+        let startX = 0, startY = 0;
+        let startLeft = 0, startTop = 0;
+      
+        // 允许的拖动区域：标题栏，但排除右侧控制按钮
+        function isOnControls(target) {
+          return !!(target && target.closest && target.closest(".bw-controls"));
         }
+      
+        bar.addEventListener("pointerdown", (e) => {
+          // 排除点到按钮
+          if (isOnControls(e.target)) return;
+      
+          const w = win();
+          if (!w) return;
+      
+          // 让浏览器别把触摸当滚动/双击缩放
+          e.preventDefault();
+      
+          // 如果最大化，先还原到上一次的窗口大小（没有则用默认）
+          if (w.classList.contains("is-max")) {
+            const before = STATE.prevRect || {
+              left: (window.innerWidth - 920) / 2,
+              top: (window.innerHeight - 560) / 2,
+              width: Math.min(920, window.innerWidth - 28),
+              height: Math.min(560, window.innerHeight - 28)
+            };
+      
+            restore();
+      
+            // Windows 风格：让指针在标题栏中的相对位置尽量保持
+            const ratioX = e.clientX / window.innerWidth;
+            const newLeft = Math.max(
+              0,
+              Math.min(window.innerWidth - before.width, e.clientX - before.width * ratioX)
+            );
+            const newTop = Math.max(
+              0,
+              Math.min(window.innerHeight - before.height, e.clientY - 16)
+            );
+      
+            applyRect({ left: newLeft, top: newTop, width: before.width, height: before.height });
+          }
+      
+          dragging = true;
+          pointerId = e.pointerId;
+      
+          // 捕获指针，保证移出元素也能拖
+          try { bar.setPointerCapture(pointerId); } catch {}
+      
+          startX = e.clientX;
+          startY = e.clientY;
+      
+          const rect = c.getBoundingClientRect();
+          startLeft = rect.left;
+          startTop = rect.top;
+      
+          c.style.position = "fixed";
+          c.style.transform = "none";
+          c.style.left = `${startLeft}px`;
+          c.style.top = `${startTop}px`;
+        });
+      
+        bar.addEventListener("pointermove", (e) => {
+          if (!dragging) return;
+          if (pointerId !== null && e.pointerId !== pointerId) return;
+      
+          const dx = e.clientX - startX;
+          const dy = e.clientY - startY;
+      
+          c.style.left = `${startLeft + dx}px`;
+          c.style.top = `${startTop + dy}px`;
+        });
+      
+        function endDrag(e) {
+          if (!dragging) return;
+          if (pointerId !== null && e.pointerId !== pointerId) return;
+      
+          dragging = false;
+          pointerId = null;
+        }
+      
+        bar.addEventListener("pointerup", endDrag);
+        bar.addEventListener("pointercancel", endDrag);
+      }
   
-        dragging = true;
-        startX = e.clientX; startY = e.clientY;
-  
-        const rect = c.getBoundingClientRect();
-        startLeft = rect.left; startTop = rect.top;
-  
-        c.style.position = "fixed";
-        c.style.transform = "none";
-        c.style.left = `${startLeft}px`;
-        c.style.top = `${startTop}px`;
-      });
-  
-      window.addEventListener("mousemove", (e) => {
-        if (!dragging) return;
-        const dx = e.clientX - startX;
-        const dy = e.clientY - startY;
-        c.style.left = `${startLeft + dx}px`;
-        c.style.top = `${startTop + dy}px`;
-      });
-  
-      window.addEventListener("mouseup", () => dragging = false);
-    }
   
     // ✅ 8 方向拉伸
     function enableResize() {
