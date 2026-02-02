@@ -1,0 +1,24 @@
+/* 白天雪花画布：放在背景上方，但在内容下方 */
+#snowfall{
+    display: none;
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 0;         /* ✅ 不用负数 */
+  }
+  
+  html[data-theme="light"] #snowfall{
+    display: block;
+  }
+  
+  html[data-theme="dark"] #snowfall{
+    display: none;
+  }
+  
+  /* 可选：移动端隐藏
+  @media (max-width: 768px){
+    #snowfall{ display:none !important; }
+  } */
+  
