@@ -4,12 +4,12 @@
 
 /* 头图半透明 - 白天模式（暗色遮罩） */
 #page-header {
-    background: rgba(0, 0, 0, 0.2) !important;
+    background: rgba(0, 0, 0, 0.15) !important;
   }
   
   /* 页脚半透明 - 白天模式（暗色遮罩） */
   #footer {
-    background: rgba(0, 0, 0, 0.2) !important;
+    background: rgba(0, 0, 0, 0.15) !important;
   }
   
   /* 白天模式遮罩透明 */

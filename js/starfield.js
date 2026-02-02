@@ -21,7 +21,8 @@
       if (!STATE.canvas) return;
       STATE.w = window.innerWidth;
       STATE.h = window.innerHeight;
-      STATE.count = Math.floor(STATE.w * 0.216);
+    //   STATE.count = Math.floor(STATE.w * 0.216);
+      STATE.count = Math.floor(STATE.w * (isMobile ? 0.12 : 0.216));
       STATE.canvas.width = STATE.w;
       STATE.canvas.height = STATE.h;
     }
@@ -150,7 +151,7 @@
     }
   
     function start() {
-      if (isMobile) return;
+    //   if (isMobile) return;
       if (!isDarkMode()) return;
   
       if (!STATE.canvas || !STATE.ctx) {

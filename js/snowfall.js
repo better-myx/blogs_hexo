@@ -10,6 +10,15 @@
       opacity: 0.7,
       stepsize: 0.5
     };
+    // ✅ 移动端降配（推荐）
+  if (isMobile) {
+      SETTINGS.flakeCount = 22;
+      SETTINGS.minDist = 90;
+      SETTINGS.speed = 0.35;
+      SETTINGS.size = 1.2;
+      SETTINGS.stepsize = 0.35;
+    };
+  
   
     const STATE = {
       rafId: null,
@@ -127,7 +136,7 @@
     }
   
     function start() {
-      if (isMobile) return;
+    //   if (isMobile) return;
       if (!isLightMode()) return;
   
       if (!STATE.canvas || !STATE.ctx) {
@@ -160,6 +169,13 @@
         STATE.mouseX = e.clientX;
         STATE.mouseY = e.clientY;
       });
+      document.addEventListener("touchmove", (e) => {
+        const t = e.touches && e.touches[0];
+        if (!t) return;
+        STATE.mouseX = t.clientX;
+        STATE.mouseY = t.clientY;
+      }, { passive: true });
+      
   
       window.addEventListener("resize", () => {
         resizeCanvas();
