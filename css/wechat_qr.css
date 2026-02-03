@@ -1,0 +1,155 @@
+/* =========================================================
+   wechat_qr.css
+   - PC：hover 微信图标弹出二维码气泡
+   - Mobile：点击弹出 modal（modal 样式也在这里）
+   ========================================================= */
+
+/* 让触发器能定位气泡 */
+a.wechat-qr-trigger{
+    position: relative;
+  }
+  
+  /* ===== PC 悬浮二维码气泡（仅 hover 设备） ===== */
+  @media (hover: hover) and (pointer: fine) {
+    a.wechat-qr-trigger .wechat-qr-pop{
+      position: absolute;
+      left: 50%;
+      bottom: calc(100% + 10px);
+      transform: translateX(-50%) translateY(6px);
+      opacity: 0;
+      pointer-events: none;
+  
+      background: rgba(255,255,255,.92);
+      border-radius: 14px;
+      padding: 10px 10px 8px;
+      box-shadow: 0 12px 28px rgba(0,0,0,.18);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      z-index: 999;
+    }
+  
+    [data-theme="dark"] a.wechat-qr-trigger .wechat-qr-pop{
+      background: rgba(25,25,25,.86);
+    }
+  
+    a.wechat-qr-trigger .wechat-qr-pop img{
+      width: 140px;
+      height: 140px;
+      display: block;
+      border-radius: 10px;
+    }
+  
+    a.wechat-qr-trigger .wechat-qr-pop .wechat-qr-text{
+      margin-top: 6px;
+      font-size: 12px;
+      font-weight: 700;
+      text-align: center;
+      opacity: .9;
+    }
+  
+    /* 小三角 */
+    a.wechat-qr-trigger .wechat-qr-pop::after{
+      content:"";
+      position:absolute;
+      left: 50%;
+      top: 100%;
+      transform: translateX(-50%);
+      border: 8px solid transparent;
+      border-top-color: rgba(255,255,255,.92);
+    }
+    [data-theme="dark"] a.wechat-qr-trigger .wechat-qr-pop::after{
+      border-top-color: rgba(25,25,25,.86);
+    }
+  
+    /* hover 显示：不影响你原有的抖动动画 */
+    a.wechat-qr-trigger:hover .wechat-qr-pop{
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+      pointer-events: auto;
+    }
+  }
+  
+  /* ===== 移动端：modal 弹层 ===== */
+  #wechat-qr-modal.hidden{ display:none; }
+  
+  #wechat-qr-modal{
+    position: fixed;
+    inset: 0;
+    z-index: 10000;
+  }
+  
+  #wechat-qr-modal .wechat-qr-mask{
+    position: absolute;
+    inset: 0;
+    background: rgba(0,0,0,.45);
+  }
+  
+  #wechat-qr-modal .wechat-qr-card{
+    position: absolute;
+    left: 50%;
+    top: 46%;
+    transform: translate(-50%, -50%);
+    width: 280px;
+    max-width: calc(100vw - 48px);
+  
+    background: rgba(255,255,255,.94);
+    border-radius: 18px;
+    box-shadow: 0 16px 36px rgba(0,0,0,.22);
+    overflow: hidden;
+    padding: 14px 14px 12px;
+  }
+  
+  [data-theme="dark"] #wechat-qr-modal .wechat-qr-card{
+    background: rgba(25,25,25,.88);
+  }
+  
+  #wechat-qr-modal img{
+    width: 100%;
+    height: auto;
+    display: block;
+    border-radius: 14px;
+  }
+  
+  #wechat-qr-modal .wechat-qr-title{
+    margin-top: 10px;
+    text-align: center;
+    font-weight: 800;
+    font-size: 14px;
+    opacity: .92;
+  }
+  
+  #wechat-qr-modal .wechat-qr-close{
+    position: absolute;
+    right: 10px;
+    top: 8px;
+    width: 34px;
+    height: 34px;
+    border-radius: 10px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    opacity: .8;
+    font-size: 20px;
+    user-select: none;
+  }
+  #wechat-qr-modal .wechat-qr-close:hover{ opacity: 1; }
+  
+  /* ====== 关键：避免主题 overflow 裁掉气泡 ====== */
+a.wechat-qr-trigger{
+    position: relative;
+    overflow: visible !important;
+  }
+  
+  /* 作者卡片/hero 区常见容器也可能 overflow hidden，直接放开 */
+  #aside-content .card-info-social-icons,
+  #page-header .hero-social-icons,
+  #page-header #hero_social_icons{
+    overflow: visible !important;
+  }
+  
+  /* 让气泡一定盖在上面 */
+  a.wechat-qr-trigger .wechat-qr-pop{
+    z-index: 99999 !important;
+  }
+  
