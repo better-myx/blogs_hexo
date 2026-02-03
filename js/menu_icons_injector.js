@@ -16,7 +16,7 @@ const MENU_ICON_MAP = {
   '分类': { icon: 'icon-fenlei', anima: 'faa-tada' },
   '标签': { icon: 'icon-biaoqian', anima: 'faa-tada' },
   '友链': { icon: 'icon-haoyoulianjie', anima: 'faa-tada' },
-  '关于': { icon: 'icon-wenzhang', anima: 'faa-tada' },
+  '关于': { icon: 'icon-guanyu', anima: 'faa-tada' },
 };
 
 // ===============================
