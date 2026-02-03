@@ -37,7 +37,7 @@ a.wechat-qr-trigger{
     }
   
     [data-theme="dark"] a.wechat-qr-trigger .wechat-qr-pop{
-      opacity: 1;
+
       background: rgba(25,25,25,.86);
     }
   
