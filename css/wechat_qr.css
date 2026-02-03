@@ -4,6 +4,12 @@
    - Mobile：点击弹出 modal（modal 样式也在这里）
    ========================================================= */
 
+/* ===== 关键：默认隐藏二维码气泡（否则移动端会变成普通图片插入页面） ===== */
+a.wechat-qr-trigger .wechat-qr-pop{
+    display: none !important;
+  }
+  
+
 /* 让触发器能定位气泡 */
 a.wechat-qr-trigger{
     position: relative;
@@ -12,7 +18,9 @@ a.wechat-qr-trigger{
   /* ===== PC 悬浮二维码气泡（仅 hover 设备） ===== */
   @media (hover: hover) and (pointer: fine) {
     a.wechat-qr-trigger .wechat-qr-pop{
+      display: block !important; 
       position: absolute;
+
       left: 50%;
       bottom: calc(100% + 10px);
       transform: translateX(-50%) translateY(6px);
@@ -29,6 +37,7 @@ a.wechat-qr-trigger{
     }
   
     [data-theme="dark"] a.wechat-qr-trigger .wechat-qr-pop{
+      opacity: 1;
       background: rgba(25,25,25,.86);
     }
   
