@@ -1,0 +1,71 @@
+/* =========================
+   Twikoo 评论增强（适配 v1.6.x DOM）
+   ========================= */
+
+/* 评论内容里的图片别溢出 */
+#twikoo .tk-content img {
+  max-width: 100%;
+  height: auto;
+}
+
+/* 代码块更舒服一点 */
+#twikoo .tk-content pre {
+  overflow: auto;
+  padding: 12px;
+  border-radius: 8px;
+}
+
+/* ============ 输入框提示气泡（自适应版） ============ */
+#twikoo .tk-field-tip{
+  position: absolute;
+  left: 0;
+  top: -52px;                 /* 给两行留空间 */
+
+  background: rgba(0, 0, 0, 0.78);
+  color: #fff;
+
+  padding: 8px 12px;
+  border-radius: 10px;
+
+  font-size: 13px;
+  line-height: 1.25;
+
+  opacity: 0;
+  transform: translateY(6px);
+  pointer-events: none;
+  transition: 0.18s;
+
+  z-index: 9999;
+  box-shadow: 0 8px 20px rgba(0,0,0,.18);
+
+  /* ✅ 自适应关键 */
+  width: max-content;         /* 内容多宽就多宽 */
+  max-width: min(520px, 90vw);/* 桌面最多 520px，手机最多 90vw */
+  white-space: normal;        /* 允许换行 */
+  word-break: break-word;     /* 超长也能断开 */
+}
+
+/* 显示状态 */
+#twikoo .tk-field-tip.show{
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* 小三角 */
+#twikoo .tk-field-tip::after{
+  content:"";
+  position:absolute;
+  left: 18px;
+  bottom: -8px;
+  border: 8px solid transparent;
+  border-top-color: rgba(0, 0, 0, 0.78);
+}
+
+/* 手机端再收紧一点 */
+@media screen and (max-width: 768px){
+  #twikoo .tk-field-tip{
+    top: -56px;
+    font-size: 12px;
+    max-width: 92vw;
+  }
+}

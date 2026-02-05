@@ -1,0 +1,65 @@
+/* ===== 西安日历卡片 ===== */
+#card-calendar {
+    display: flex;
+    padding: 18px 10px !important;
+  }
+  
+  #calendar-area-left {
+    width: 42%;
+    text-align: center;
+    line-height: 1.6;
+  }
+  
+  #calendar-week { font-weight: 700; }
+  #calendar-date { font-size: 48px; font-weight: 800; line-height: 1.2; }
+  #calendar-solar, #calendar-lunar { font-size: 12px; opacity: 0.9; }
+  
+  #calendar-area-right {
+    width: 58%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  #calendar-main { width: 100%; }
+  
+  #calendar-main .calendar-r0,
+  #calendar-main .calendar-r1,
+  #calendar-main .calendar-r2,
+  #calendar-main .calendar-r3,
+  #calendar-main .calendar-r4,
+  #calendar-main .calendar-r5 {
+    display: flex;
+    justify-content: space-between;
+  }
+  
+  #calendar-main [class^="calendar-d"] {
+    width: 14.28%;
+    text-align: center;
+    line-height: 28px;
+    border-radius: 10px;
+  }
+  
+  #calendar-main a {
+    display: inline-block;
+    width: 100%;
+    border-radius: 10px;
+  }
+  
+  #calendar-main a.now {
+    background: var(--theme-color);
+    color: #fff;
+    font-weight: 800;
+  }
+  
+  /* 左侧大日期数字：主题色 */
+#card-calendar #calendar-date {
+    color: var(--theme-color) !important;
+  }
+  
+  /* 右侧“今天”选中背景：主题色（你原本已经是 var(--theme-color)，这里是加权确保生效） */
+  #card-calendar #calendar-main a.now {
+    background: var(--theme-color) !important;
+    color: #fff !important;
+  }
+  

@@ -1,0 +1,117 @@
+/* source/css/welcome.css */
+
+/* =========================
+   1) 公告栏：去掉左侧喇叭图标（保留“公告”文字）
+   ========================= */
+   #aside-content .card-announcement .item-headline a.faa-parent,
+   #aside-content .card-announcement .item-headline svg,
+   #aside-content .card-announcement .item-headline i{
+     display:none !important;
+   }
+   
+   /* 公告标题不要跟随主题色（保持默认） */
+   /* #aside-content .card-announcement .item-headline span{
+     color: var(--theme-color) !important;
+     font-weight: 800;
+   } */
+   
+   /* =========================
+      2) 公告栏内部：整体左对齐
+      ========================= */
+   #aside-content .card-announcement .announcement_content{
+     text-align:left !important;
+   }
+   
+   /* =========================
+      3) 两个模块：主题色矩形边框 + 轻主题色底色 + 圆角矩形
+      ✅ 本次调整：
+      - 模块更“宽”：减小左右外边距（ann-box margin-left/right）
+      - 同时略减内边距，让内容区更大
+      ========================= */
+   .card-announcement #welcome-info .ann-box,
+   #aside-content .card-announcement #welcome-info .ann-box{
+     position: relative;
+   
+     border: 2px solid color-mix(in srgb, var(--theme-color) 75%, transparent) !important;
+     background: color-mix(in srgb, var(--theme-color) 10%, var(--card-bg)) !important;
+   
+     border-radius: 14px;
+   
+     /* ✅ 内容更大：内边距再小一点 */
+     padding: 10px 12px;
+   
+     /* ✅ 模块更宽：左右外边距压到更小（原先 10px 0） */
+     margin: 8px 0px;
+   
+     box-shadow: none !important;
+   }
+   
+   @supports not (background: color-mix(in srgb, red 10%, white)) {
+     .card-announcement #welcome-info .ann-box,
+     #aside-content .card-announcement #welcome-info .ann-box{
+       border-color: var(--theme-color) !important;
+       background: var(--card-bg) !important;
+     }
+   }
+   
+   /* dots 不要 */
+   .card-announcement #welcome-info .ann-dots,
+   #aside-content .card-announcement #welcome-info .ann-dots{
+     display:none !important;
+   }
+   
+   /* 旧标题不显示 */
+   .card-announcement #welcome-info .ann-title,
+   #aside-content .card-announcement #welcome-info .ann-title{
+     display:none !important;
+   }
+   
+   /* 概况文字 */
+   .card-announcement #welcome-info .ann-text,
+   #aside-content .card-announcement #welcome-info .ann-text{
+     color: var(--font-color);
+     line-height: 1.75;
+   }
+   
+   /* =========================
+      4) 欢迎信息行：稳定左对齐
+      ========================= */
+   #welcome-info .welcome-info{
+     color: var(--font-color);
+     line-height: 1.85;
+   }
+   
+   #welcome-info .w-row{
+     display:flex;
+     gap: 8px;
+     align-items: baseline;
+     flex-wrap: wrap;
+   }
+   
+   /* 第一行强制不换行（现在只显示国家，基本不会溢出） */
+   #welcome-info .w-row.w-row--from{
+     flex-wrap: nowrap !important;
+     white-space: nowrap !important;
+     gap: 6px;
+   }
+   
+   /* 标签 */
+   #welcome-info .w-label{
+     font-weight: 700;
+     opacity: .85;
+     white-space: nowrap;
+   }
+   
+   /* 值：跟随主题色 */
+   #welcome-info .w-val{
+     font-weight: 800;
+     color: var(--theme-color);
+   }
+   
+   /* 末尾提示文案：跟随主题色 */
+   #welcome-info .w-tip{
+     margin-top: 6px;
+     font-weight: 800;
+     color: var(--theme-color);
+   }
+   
