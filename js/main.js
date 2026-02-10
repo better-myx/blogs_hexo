@@ -979,3 +979,40 @@ document.addEventListener('DOMContentLoaded', () => {
     })
   })
 })
+
+
+
+
+
+
+
+
+document.addEventListener('DOMContentLoaded', function () {
+  function cssVar(name, fallback) {
+    const v = getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+    return v || fallback;
+  }
+
+  document.addEventListener('copy', function () {
+    const themeMode = document.documentElement.getAttribute('data-theme') || 'light';
+
+    // 从 CSS 变量读取（你可以在 CSS 里按 light/dark 定义）
+    const bgColor = cssVar('--snackbar-bg', themeMode === 'dark' ? '#1f1f1f' : '#49b1f5');
+    const textColor = cssVar('--snackbar-color', themeMode === 'dark' ? '#fff' : '#000');
+
+    const snackbar = Snackbar.show({
+      text: '耶嘿！复制成功🍬',
+      duration: 3000,
+      actionText: '×',
+      pos: 'top-left',              // ✅ 关键：snackbarjs 用这个控制位置
+      backgroundColor: bgColor,
+      textColor: textColor,
+      customClass: 'snackbar-custom'
+    });
+
+    setTimeout(function () {
+      const btn = snackbar && snackbar.element && snackbar.element.querySelector('button');
+      if (btn) btn.addEventListener('click', function () { snackbar.dismiss(); });
+    }, 50);
+  });
+});
