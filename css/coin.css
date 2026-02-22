@@ -235,7 +235,7 @@
   
   /* 浅色模式背景 */
   html[data-theme="light"] .snackbar-custom {
-    background-color: #49b1f5;
+    background-color: #39C5BB;
     color: #000;
   }
   
@@ -254,7 +254,7 @@
   
   
   html[data-theme="light"] {
-    --snackbar-bg: #49b1f5;
+    --snackbar-bg: #39C5BB;
     --snackbar-color: #000;
   }
   
