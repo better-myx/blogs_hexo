@@ -123,35 +123,52 @@
   document.addEventListener('DOMContentLoaded', bindHomeBtnMobile);
   document.addEventListener('pjax:complete', bindHomeBtnMobile);
   
-  // ✅ 导航一开始就立即清除，不等完成
-  document.addEventListener('pjax:send', function() {
-    const blogInfo = document.getElementById('blog-info');
-    if (blogInfo) blogInfo.classList.remove('mobile-active');
+  document.addEventListener('pjax:send', function () {
+    clearHomeBtnState();
   });
   
-  function bindHomeBtnMobile() {
-    const blogInfo = document.getElementById('blog-info');
-    // ✅ 每次 pjax 完成，DOM 可能是新元素，先清除再重绑
-    if (blogInfo) {
-      blogInfo.classList.remove('mobile-active');
-      delete blogInfo._homeBtnBound; // 清掉标记，保证重新绑定
-    }
+  function clearHomeBtnState() {
+    const bi = document.getElementById('blog-info');
+    if (!bi) return;
+    bi.classList.remove('mobile-active');
+    clearTimeout(bi._homeBtnTimer);
+  }
   
+  function bindHomeBtnMobile() {
+    clearHomeBtnState();
+  
+    const blogInfo = document.getElementById('blog-info');
     if (!blogInfo || blogInfo._homeBtnBound) return;
     blogInfo._homeBtnBound = true;
   
-    blogInfo.addEventListener('click', function(e) {
-      if (window.innerWidth > 768) return;
-      // 已激活状态下点击链接 → 允许跳转
-      if (this.classList.contains('mobile-active') && e.target.closest('a.nav-site-title')) return;
-      e.preventDefault();
-      this.classList.toggle('mobile-active');
+    blogInfo.addEventListener('click', function (e) {
+      // 桌面端不处理
+      if (window.innerWidth > 900) return;
+  
+      const isActive = this.classList.contains('mobile-active');
+  
+      if (!isActive) {
+        // ✅ 第一次点击：拦截跳转，显示房子
+        e.preventDefault();
+        e.stopPropagation();
+        this.classList.add('mobile-active');
+  
+        // 2.5 秒后自动收起
+        clearTimeout(this._homeBtnTimer);
+        this._homeBtnTimer = setTimeout(() => {
+          this.classList.remove('mobile-active');
+        }, 2500);
+      } else {
+        // ✅ 第二次点击（房子状态）：清除状态，正常跳转
+        clearHomeBtnState();
+        // 不阻止默认行为，链接自然跳转
+      }
     });
   
-    document.addEventListener('click', function(e) {
+    // 点击其他区域收起
+    document.addEventListener('click', function (e) {
       if (!e.target.closest('#blog-info')) {
-        const bi = document.getElementById('blog-info');
-        if (bi) bi.classList.remove('mobile-active');
+        clearHomeBtnState();
       }
     });
   }
