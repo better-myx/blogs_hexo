@@ -1,376 +1,409 @@
 // source/js/beautify_window.js
 (() => {
-    function win() { return document.getElementById("beautify-window"); }
-    function tray() { return document.getElementById("beautify-tray"); }
-    function card() { return document.querySelector("#beautify-window .bw-card"); }
-  
-    const STATE = {
-      prevRect: null // {left, top, width, height}
-    };
-  
-    function openWindow() {
-      const w = win(), t = tray();
-      if (!w) return;
-      w.classList.remove("hidden");
-      
-      w.setAttribute("aria-hidden", "false");
-      if (t) t.classList.add("hidden");
-  
-      // 默认打开居中（清掉可能残留的 left/top/transform）
-      const c = card();
-      if (c && !w.classList.contains("is-max")) {
-        c.style.position = "fixed";
-        c.style.left = "50%";
-        c.style.top = "55%";
-        c.style.transform = "translate(-50%, -50%)";
-        c.style.width = "";
-        c.style.height = "";
-      }
-    }
-  
-    function closeWindow() {
-      const w = win(), t = tray();
-      if (!w) return;
-      w.classList.add("hidden");
-      w.classList.remove("is-max");
-      w.setAttribute("aria-hidden", "true");
-      if (t) t.classList.add("hidden");
-    }
-  
-    function minimizeWindow() {
-      const w = win(), t = tray();
-      if (!w || !t) return;
-      w.classList.add("hidden");
-      w.classList.remove("is-max");
-      w.setAttribute("aria-hidden", "true");
-      t.classList.remove("hidden");
-    }
-  
-    function saveRect() {
-      const c = card();
-      if (!c) return;
-      const r = c.getBoundingClientRect();
-      STATE.prevRect = { left: r.left, top: r.top, width: r.width, height: r.height };
-    }
-  
-    function applyRect(rect) {
-      const c = card();
-      if (!c || !rect) return;
+  function win() { return document.getElementById("beautify-window"); }
+  function tray() { return document.getElementById("beautify-tray"); }
+  function card() { return document.querySelector("#beautify-window .bw-card"); }
+
+  const STATE = {
+    prevRect: null // {left, top, width, height}
+  };
+
+  function openWindow() {
+    const w = win(), t = tray();
+    if (!w) return;
+    w.classList.remove("hidden");
+    
+    w.setAttribute("aria-hidden", "false");
+    if (t) t.classList.add("hidden");
+
+    // 默认打开居中（清掉可能残留的 left/top/transform）
+    const c = card();
+    if (c && !w.classList.contains("is-max")) {
       c.style.position = "fixed";
-      c.style.transform = "none";
-      c.style.left = rect.left + "px";
-      c.style.top = rect.top + "px";
-      c.style.width = rect.width + "px";
-      c.style.height = rect.height + "px";
+      c.style.left = "50%";
+      c.style.top = "55%";
+      c.style.transform = "translate(-50%, -50%)";
+      c.style.width = "";
+      c.style.height = "";
     }
-  
-    function maximize() {
-      const w = win();
-      if (!w) return;
-      if (!w.classList.contains("is-max")) saveRect();
-      w.classList.add("is-max");
-    }
-  
-    function restore() {
-      const w = win();
-      if (!w) return;
-      w.classList.remove("is-max");
-      if (STATE.prevRect) applyRect(STATE.prevRect);
-    }
-  
-    function toggleMaximize() {
-      const w = win();
-      if (!w) return;
-      if (w.classList.contains("is-max")) restore();
-      else maximize();
-    }
-  
-    // ✅ Windows策略：最大化时拖标题栏 -> 自动还原并跟随指针（支持手机触摸）
-    function enableDrag() {
-        const bar = document.getElementById("bw-titlebar");
-        const c = card();
-        if (!bar || !c) return;
-        if (bar.dataset.dragBound) return;
-        bar.dataset.dragBound = "1";
-      
-        let dragging = false;
-        let pointerId = null;
-        let startX = 0, startY = 0;
-        let startLeft = 0, startTop = 0;
-      
-        // 允许的拖动区域：标题栏，但排除右侧控制按钮
-        function isOnControls(target) {
-          return !!(target && target.closest && target.closest(".bw-controls"));
-        }
-      
-        bar.addEventListener("pointerdown", (e) => {
-          // 排除点到按钮
-          if (isOnControls(e.target)) return;
-      
-          const w = win();
-          if (!w) return;
-      
-          // 让浏览器别把触摸当滚动/双击缩放
-          e.preventDefault();
-      
-          // 如果最大化，先还原到上一次的窗口大小（没有则用默认）
-          if (w.classList.contains("is-max")) {
-            const before = STATE.prevRect || {
-              left: (window.innerWidth - 920) / 2,
-              top: (window.innerHeight - 560) / 2,
-              width: Math.min(920, window.innerWidth - 28),
-              height: Math.min(560, window.innerHeight - 28)
-            };
-      
-            restore();
-      
-            // Windows 风格：让指针在标题栏中的相对位置尽量保持
-            const ratioX = e.clientX / window.innerWidth;
-            const newLeft = Math.max(
-              0,
-              Math.min(window.innerWidth - before.width, e.clientX - before.width * ratioX)
-            );
-            const newTop = Math.max(
-              0,
-              Math.min(window.innerHeight - before.height, e.clientY - 16)
-            );
-      
-            applyRect({ left: newLeft, top: newTop, width: before.width, height: before.height });
-          }
-      
-          dragging = true;
-          pointerId = e.pointerId;
-      
-          // 捕获指针，保证移出元素也能拖
-          try { bar.setPointerCapture(pointerId); } catch {}
-      
-          startX = e.clientX;
-          startY = e.clientY;
-      
-          const rect = c.getBoundingClientRect();
-          startLeft = rect.left;
-          startTop = rect.top;
-      
-          c.style.position = "fixed";
-          c.style.transform = "none";
-          c.style.left = `${startLeft}px`;
-          c.style.top = `${startTop}px`;
-        });
-      
-        bar.addEventListener("pointermove", (e) => {
-          if (!dragging) return;
-          if (pointerId !== null && e.pointerId !== pointerId) return;
-      
-          const dx = e.clientX - startX;
-          const dy = e.clientY - startY;
-      
-          c.style.left = `${startLeft + dx}px`;
-          c.style.top = `${startTop + dy}px`;
-        });
-      
-        function endDrag(e) {
-          if (!dragging) return;
-          if (pointerId !== null && e.pointerId !== pointerId) return;
-      
-          dragging = false;
-          pointerId = null;
-        }
-      
-        bar.addEventListener("pointerup", endDrag);
-        bar.addEventListener("pointercancel", endDrag);
-      }
-  
-  
-    // ✅ 8 方向拉伸
-    function enableResize() {
+  }
+
+  function closeWindow() {
+    const w = win(), t = tray();
+    if (!w) return;
+    w.classList.add("hidden");
+    w.classList.remove("is-max");
+    w.setAttribute("aria-hidden", "true");
+    if (t) t.classList.add("hidden");
+  }
+
+  function minimizeWindow() {
+    const w = win(), t = tray();
+    if (!w || !t) return;
+    w.classList.add("hidden");
+    w.classList.remove("is-max");
+    w.setAttribute("aria-hidden", "true");
+    t.classList.remove("hidden");
+  }
+
+  function saveRect() {
+    const c = card();
+    if (!c) return;
+    const r = c.getBoundingClientRect();
+    STATE.prevRect = { left: r.left, top: r.top, width: r.width, height: r.height };
+  }
+
+  function applyRect(rect) {
+    const c = card();
+    if (!c || !rect) return;
+    c.style.position = "fixed";
+    c.style.transform = "none";
+    c.style.left = rect.left + "px";
+    c.style.top = rect.top + "px";
+    c.style.width = rect.width + "px";
+    c.style.height = rect.height + "px";
+  }
+
+  function maximize() {
+    const w = win();
+    if (!w) return;
+    if (!w.classList.contains("is-max")) saveRect();
+    w.classList.add("is-max");
+  }
+
+  function restore() {
+    const w = win();
+    if (!w) return;
+    w.classList.remove("is-max");
+    if (STATE.prevRect) applyRect(STATE.prevRect);
+  }
+
+  function toggleMaximize() {
+    const w = win();
+    if (!w) return;
+    if (w.classList.contains("is-max")) restore();
+    else maximize();
+  }
+
+  // ✅ Windows策略：最大化时拖标题栏 -> 自动还原并跟随指针（支持手机触摸）
+  function enableDrag() {
+      const bar = document.getElementById("bw-titlebar");
       const c = card();
-      const w = win();
-      if (!c || !w) return;
-      if (c.dataset.resizeBound) return;
-      c.dataset.resizeBound = "1";
-  
-      let resizing = false;
-      let dir = "";
+      if (!bar || !c) return;
+      if (bar.dataset.dragBound) return;
+      bar.dataset.dragBound = "1";
+    
+      let dragging = false;
+      let pointerId = null;
       let startX = 0, startY = 0;
-      let startRect = null;
-  
-      function clamp(v, min, max){ return Math.max(min, Math.min(max, v)); }
-  
-      c.addEventListener("mousedown", (e) => {
-        const target = e.target;
-        if (!(target instanceof HTMLElement)) return;
-        const handle = target.closest(".bw-r");
-        if (!handle) return;
-  
-        if (w.classList.contains("is-max")) return; // 最大化不拉伸
-  
-        dir = handle.dataset.dir || "";
-        resizing = true;
-        startX = e.clientX; startY = e.clientY;
-        const r = c.getBoundingClientRect();
-        startRect = { left: r.left, top: r.top, width: r.width, height: r.height };
-  
+      let startLeft = 0, startTop = 0;
+    
+      // 允许的拖动区域：标题栏，但排除右侧控制按钮
+      function isOnControls(target) {
+        return !!(target && target.closest && target.closest(".bw-controls"));
+      }
+    
+      bar.addEventListener("pointerdown", (e) => {
+        // 排除点到按钮
+        if (isOnControls(e.target)) return;
+    
+        const w = win();
+        if (!w) return;
+    
+        // 让浏览器别把触摸当滚动/双击缩放
+        e.preventDefault();
+    
+        // 如果最大化，先还原到上一次的窗口大小（没有则用默认）
+        if (w.classList.contains("is-max")) {
+          const before = STATE.prevRect || {
+            left: (window.innerWidth - 920) / 2,
+            top: (window.innerHeight - 560) / 2,
+            width: Math.min(920, window.innerWidth - 28),
+            height: Math.min(560, window.innerHeight - 28)
+          };
+    
+          restore();
+    
+          // Windows 风格：让指针在标题栏中的相对位置尽量保持
+          const ratioX = e.clientX / window.innerWidth;
+          const newLeft = Math.max(
+            0,
+            Math.min(window.innerWidth - before.width, e.clientX - before.width * ratioX)
+          );
+          const newTop = Math.max(
+            0,
+            Math.min(window.innerHeight - before.height, e.clientY - 16)
+          );
+    
+          applyRect({ left: newLeft, top: newTop, width: before.width, height: before.height });
+        }
+    
+        dragging = true;
+        pointerId = e.pointerId;
+    
+        // 捕获指针，保证移出元素也能拖
+        try { bar.setPointerCapture(pointerId); } catch {}
+    
+        startX = e.clientX;
+        startY = e.clientY;
+    
+        const rect = c.getBoundingClientRect();
+        startLeft = rect.left;
+        startTop = rect.top;
+    
         c.style.position = "fixed";
         c.style.transform = "none";
-        c.style.left = `${startRect.left}px`;
-        c.style.top = `${startRect.top}px`;
-        c.style.width = `${startRect.width}px`;
-        c.style.height = `${startRect.height}px`;
-  
-        e.preventDefault();
-        e.stopPropagation();
+        c.style.left = `${startLeft}px`;
+        c.style.top = `${startTop}px`;
       });
-  
-      window.addEventListener("mousemove", (e) => {
-        if (!resizing || !startRect) return;
-  
+    
+      bar.addEventListener("pointermove", (e) => {
+        if (!dragging) return;
+        if (pointerId !== null && e.pointerId !== pointerId) return;
+    
         const dx = e.clientX - startX;
         const dy = e.clientY - startY;
-  
-        const minW = 560, minH = 380;
-        let left = startRect.left;
-        let top = startRect.top;
-        let width = startRect.width;
-        let height = startRect.height;
-  
-        if (dir.includes("e")) width = startRect.width + dx;
-        if (dir.includes("s")) height = startRect.height + dy;
-  
-        if (dir.includes("w")) {
-          width = startRect.width - dx;
-          left = startRect.left + dx;
-        }
-        if (dir.includes("n")) {
-          height = startRect.height - dy;
-          top = startRect.top + dy;
-        }
-  
-        // clamp 最小尺寸
-        if (width < minW) {
-          if (dir.includes("w")) left -= (minW - width);
-          width = minW;
-        }
-        if (height < minH) {
-          if (dir.includes("n")) top -= (minH - height);
-          height = minH;
-        }
-  
-        // clamp 不要拖出屏幕太多（留一点余量）
-        const maxLeft = window.innerWidth - 80;
-        const maxTop = window.innerHeight - 60;
-        left = clamp(left, -20, maxLeft);
-        top = clamp(top, -10, maxTop);
-  
-        c.style.left = `${left}px`;
-        c.style.top = `${top}px`;
-        c.style.width = `${width}px`;
-        c.style.height = `${height}px`;
+    
+        c.style.left = `${startLeft + dx}px`;
+        c.style.top = `${startTop + dy}px`;
       });
-  
-      window.addEventListener("mouseup", () => {
-        if (!resizing) return;
-        resizing = false;
-        dir = "";
-        startRect = null;
-      });
+    
+      function endDrag(e) {
+        if (!dragging) return;
+        if (pointerId !== null && e.pointerId !== pointerId) return;
+    
+        dragging = false;
+        pointerId = null;
+      }
+    
+      bar.addEventListener("pointerup", endDrag);
+      bar.addEventListener("pointercancel", endDrag);
     }
-  
-    function bindEventsOnce() {
-      if (window.__beautifyWindowBound) return;
-      window.__beautifyWindowBound = true;
-  
-      document.addEventListener("click", (e) => {
-        const t = e.target;
-        if (!(t instanceof HTMLElement)) return;
-  
-        if (t.closest("#beautify-tray")) { openWindow(); return; }
-        if (t.matches("#beautify-window .bw-ctl.close")) { closeWindow(); return; }
-        if (t.matches("#beautify-window .bw-ctl.min")) { minimizeWindow(); return; }
-        if (t.matches("#beautify-window .bw-ctl.max")) { toggleMaximize(); return; }
-  
-        // 雪花开关
-        if (t.closest("#bw-toggle-snowfall") && window.__beautifySettings){
-          const s = window.__beautifySettings.load();
-          s.snowfall = !s.snowfall;
-          window.__beautifySettings.save(s);
-          window.__beautifySettings.applySnowfall(!!s.snowfall);
-          window.__beautifySettings.syncActiveUI();
-          return;
-        }
-  
-        // 星空开关
-        if (t.closest("#bw-toggle-starfield") && window.__beautifySettings){
-          const s = window.__beautifySettings.load();
-          s.starfield = !s.starfield;
-          window.__beautifySettings.save(s);
-          window.__beautifySettings.applyStarfield(!!s.starfield);
-          window.__beautifySettings.syncActiveUI();
-          return;
-        }
-  
-        // 字体点击
-        const fontBtn = t.closest("#bw-fonts .bw-font");
-        if (fontBtn && window.__beautifySettings){
-          const s = window.__beautifySettings.load();
-          s.font = fontBtn.dataset.font ?? "ZhuZiAWan";
-          window.__beautifySettings.save(s);
-          window.__beautifySettings.applyFont(s.font);
-          window.__beautifySettings.syncActiveUI();
-          return;
-        }
-  
-        // 主题色点击（只改当前模式）
-        const dot = t.closest("#bw-colors .bw-dot");
-        if (dot && window.__beautifySettings){
-          const s = window.__beautifySettings.load();
-          const key = dot.dataset.color ?? "green";
-          const isDark = document.documentElement.getAttribute("data-theme") === "dark";
-          if (isDark) s.themeColorDark = key;
-          else s.themeColorLight = key;
-  
-          window.__beautifySettings.save(s);
-          window.__beautifySettings.applyThemeColorBySettings(s);
-          window.__beautifySettings.syncActiveUI();
-          return;
-        }
-      });
-    }
-  
-    // ✅ 单一入口：确保 nav onclick 一定能调用
-    window.toggleBeautifyPanel = function () {
-      window.__beautifyEnsureDOM && window.__beautifyEnsureDOM();
-      window.__beautifySettings && window.__beautifySettings.renderOptionsOnce && window.__beautifySettings.renderOptionsOnce();
-  
-      bindEventsOnce();
-      enableDrag();
-      enableResize();
-  
-      const w = win();
-      if (!w) return;
-  
-      if (w.classList.contains("hidden")) openWindow();
-      else closeWindow();
-  
-      // 同步一次
-      if (window.__beautifySettings) {
+
+
+  // ✅ 8 方向拉伸
+  function enableResize() {
+    const c = card();
+    const w = win();
+    if (!c || !w) return;
+    if (c.dataset.resizeBound) return;
+    c.dataset.resizeBound = "1";
+
+    let resizing = false;
+    let dir = "";
+    let startX = 0, startY = 0;
+    let startRect = null;
+
+    function clamp(v, min, max){ return Math.max(min, Math.min(max, v)); }
+
+    c.addEventListener("mousedown", (e) => {
+      const target = e.target;
+      if (!(target instanceof HTMLElement)) return;
+      const handle = target.closest(".bw-r");
+      if (!handle) return;
+
+      if (w.classList.contains("is-max")) return; // 最大化不拉伸
+
+      dir = handle.dataset.dir || "";
+      resizing = true;
+      startX = e.clientX; startY = e.clientY;
+      const r = c.getBoundingClientRect();
+      startRect = { left: r.left, top: r.top, width: r.width, height: r.height };
+
+      c.style.position = "fixed";
+      c.style.transform = "none";
+      c.style.left = `${startRect.left}px`;
+      c.style.top = `${startRect.top}px`;
+      c.style.width = `${startRect.width}px`;
+      c.style.height = `${startRect.height}px`;
+
+      e.preventDefault();
+      e.stopPropagation();
+    });
+
+    window.addEventListener("mousemove", (e) => {
+      if (!resizing || !startRect) return;
+
+      const dx = e.clientX - startX;
+      const dy = e.clientY - startY;
+
+      const minW = 560, minH = 380;
+      let left = startRect.left;
+      let top = startRect.top;
+      let width = startRect.width;
+      let height = startRect.height;
+
+      if (dir.includes("e")) width = startRect.width + dx;
+      if (dir.includes("s")) height = startRect.height + dy;
+
+      if (dir.includes("w")) {
+        width = startRect.width - dx;
+        left = startRect.left + dx;
+      }
+      if (dir.includes("n")) {
+        height = startRect.height - dy;
+        top = startRect.top + dy;
+      }
+
+      // clamp 最小尺寸
+      if (width < minW) {
+        if (dir.includes("w")) left -= (minW - width);
+        width = minW;
+      }
+      if (height < minH) {
+        if (dir.includes("n")) top -= (minH - height);
+        height = minH;
+      }
+
+      // clamp 不要拖出屏幕太多（留一点余量）
+      const maxLeft = window.innerWidth - 80;
+      const maxTop = window.innerHeight - 60;
+      left = clamp(left, -20, maxLeft);
+      top = clamp(top, -10, maxTop);
+
+      c.style.left = `${left}px`;
+      c.style.top = `${top}px`;
+      c.style.width = `${width}px`;
+      c.style.height = `${height}px`;
+    });
+
+    window.addEventListener("mouseup", () => {
+      if (!resizing) return;
+      resizing = false;
+      dir = "";
+      startRect = null;
+    });
+  }
+
+  function bindEventsOnce() {
+    if (window.__beautifyWindowBound) return;
+    window.__beautifyWindowBound = true;
+
+    document.addEventListener("click", (e) => {
+      const t = e.target;
+      if (!(t instanceof HTMLElement)) return;
+
+      if (t.closest("#beautify-tray")) { openWindow(); return; }
+      if (t.matches("#beautify-window .bw-ctl.close")) { closeWindow(); return; }
+      if (t.matches("#beautify-window .bw-ctl.min")) { minimizeWindow(); return; }
+      if (t.matches("#beautify-window .bw-ctl.max")) { toggleMaximize(); return; }
+
+      // 雪花开关
+      if (t.closest("#bw-toggle-snowfall") && window.__beautifySettings){
         const s = window.__beautifySettings.load();
-        window.__beautifySettings.applyThemeColorBySettings(s);
-        window.__beautifySettings.applyFont(s.font);
+        s.snowfall = !s.snowfall;
+        window.__beautifySettings.save(s);
         window.__beautifySettings.applySnowfall(!!s.snowfall);
+        window.__beautifySettings.syncActiveUI();
+        return;
+      }
+
+      // 星空开关
+      if (t.closest("#bw-toggle-starfield") && window.__beautifySettings){
+        const s = window.__beautifySettings.load();
+        s.starfield = !s.starfield;
+        window.__beautifySettings.save(s);
         window.__beautifySettings.applyStarfield(!!s.starfield);
         window.__beautifySettings.syncActiveUI();
+        return;
       }
-    };
-  
-    function boot() {
-      window.__beautifyEnsureDOM && window.__beautifyEnsureDOM();
-      window.__beautifySettings && window.__beautifySettings.renderOptionsOnce && window.__beautifySettings.renderOptionsOnce();
-      bindEventsOnce();
-      enableDrag();
-      enableResize();
+
+      // 字体点击
+      const fontBtn = t.closest("#bw-fonts .bw-font");
+      if (fontBtn && window.__beautifySettings){
+        const s = window.__beautifySettings.load();
+        s.font = fontBtn.dataset.font ?? "ZhuZiAWan";
+        window.__beautifySettings.save(s);
+        window.__beautifySettings.applyFont(s.font);
+        window.__beautifySettings.syncActiveUI();
+        return;
+      }
+
+      // 主题色点击（只改当前模式）
+      const dot = t.closest("#bw-colors .bw-dot");
+      if (dot && window.__beautifySettings){
+        const s = window.__beautifySettings.load();
+        const key = dot.dataset.color ?? "green";
+        const isDark = document.documentElement.getAttribute("data-theme") === "dark";
+        if (isDark) s.themeColorDark = key;
+        else s.themeColorLight = key;
+
+        window.__beautifySettings.save(s);
+        window.__beautifySettings.applyThemeColorBySettings(s);
+        window.__beautifySettings.syncActiveUI();
+        return;
+      }
+
+      // ✅ 字体大小步进器
+      const stepBtn = t.closest("#beautify-window .bw-step-btn");
+      if (stepBtn && window.__beautifySettings) {
+        const target = stepBtn.dataset.target; // 'fontSize' or 'h1Size'
+        const action = stepBtn.dataset.action; // 'inc' or 'dec'
+        const isMob  = window.innerWidth <= 768;
+        const s = window.__beautifySettings.load();
+
+        if (target === 'fontSize') {
+          s.fontSize = Math.max(12, Math.min(26, (s.fontSize ?? (isMob ? 14 : 16)) + (action === 'inc' ? 1 : -1)));
+          window.__beautifySettings.applyFontSize(s.fontSize);
+        } else if (target === 'h1Size') {
+          s.h1Size = Math.max(16, Math.min(48, (s.h1Size ?? (isMob ? 18 : 24)) + (action === 'inc' ? 2 : -2)));
+          window.__beautifySettings.applyH1Size(s.h1Size);
+        }
+
+        window.__beautifySettings.save(s);
+        window.__beautifySettings.syncActiveUI();
+        return;
+      }
+
+      // ✅ 重置字体大小
+      if (t.matches('#bw-reset-fontsize') && window.__beautifySettings) {
+        const isMob = window.innerWidth <= 768;
+        const s = window.__beautifySettings.load();
+        s.fontSize = isMob ? 14 : 16;
+        s.h1Size   = isMob ? 18 : 24;
+        window.__beautifySettings.save(s);
+        window.__beautifySettings.applyFontSize(s.fontSize);
+        window.__beautifySettings.applyH1Size(s.h1Size);
+        window.__beautifySettings.syncActiveUI();
+        return;
+      }
+    });
+  }
+
+  // ✅ 单一入口：确保 nav onclick 一定能调用
+  window.toggleBeautifyPanel = function () {
+    window.__beautifyEnsureDOM && window.__beautifyEnsureDOM();
+    window.__beautifySettings && window.__beautifySettings.renderOptionsOnce && window.__beautifySettings.renderOptionsOnce();
+
+    bindEventsOnce();
+    enableDrag();
+    enableResize();
+
+    const w = win();
+    if (!w) return;
+
+    if (w.classList.contains("hidden")) openWindow();
+    else closeWindow();
+
+    // 同步一次
+    if (window.__beautifySettings) {
+      const s = window.__beautifySettings.load();
+      window.__beautifySettings.applyThemeColorBySettings(s);
+      window.__beautifySettings.applyFont(s.font);
+      window.__beautifySettings.applySnowfall(!!s.snowfall);
+      window.__beautifySettings.applyStarfield(!!s.starfield);
+      window.__beautifySettings.syncActiveUI();
     }
-  
-    document.addEventListener("DOMContentLoaded", boot);
-    document.addEventListener("pjax:complete", boot);
-  })();
-  
+  };
+
+  function boot() {
+    window.__beautifyEnsureDOM && window.__beautifyEnsureDOM();
+    window.__beautifySettings && window.__beautifySettings.renderOptionsOnce && window.__beautifySettings.renderOptionsOnce();
+    bindEventsOnce();
+    enableDrag();
+    enableResize();
+  }
+
+  document.addEventListener("DOMContentLoaded", boot);
+  document.addEventListener("pjax:complete", boot);
+})();
