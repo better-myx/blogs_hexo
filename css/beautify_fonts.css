@@ -30,3 +30,6 @@ body{
   font-family: var(--global-font) !important;
 }
 
+#article-container {
+  font-size: 18px;  /* 只影响文章正文区域 */
+}
