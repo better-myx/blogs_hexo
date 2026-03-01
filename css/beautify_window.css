@@ -424,9 +424,20 @@ html[data-theme="dark"] #beautify-window .bw-fontsize-item {
   justify-content: center;
   transition: .15s;
 }
-#beautify-window .bw-step-btn:hover {
-  background: var(--theme-color);
-  color: #fff;
+/* 有鼠标的设备：hover 生效 */
+@media (hover: hover) {
+  #beautify-window .bw-step-btn:hover {
+    background: var(--theme-color);
+    color: #fff;
+  }
+}
+
+/* 触摸设备：按下时生效，抬起立刻恢复，不黏住 */
+@media (hover: none) {
+  #beautify-window .bw-step-btn:active {
+    background: var(--theme-color);
+    color: #fff;
+  }
 }
 #beautify-window .bw-step-val {
   min-width: 36px;
