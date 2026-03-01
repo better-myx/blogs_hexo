@@ -123,9 +123,7 @@
   document.addEventListener('DOMContentLoaded', bindHomeBtnMobile);
   document.addEventListener('pjax:complete', bindHomeBtnMobile);
   
-  document.addEventListener('pjax:send', function () {
-    clearHomeBtnState();
-  });
+  document.addEventListener('pjax:send', clearHomeBtnState);
   
   function clearHomeBtnState() {
     const bi = document.getElementById('blog-info');
@@ -141,34 +139,16 @@
     if (!blogInfo || blogInfo._homeBtnBound) return;
     blogInfo._homeBtnBound = true;
   
-    blogInfo.addEventListener('click', function (e) {
-      // 桌面端不处理
+    blogInfo.addEventListener('click', function () {
       if (window.innerWidth > 900) return;
   
-      const isActive = this.classList.contains('mobile-active');
+      // 显示房子，600ms 后自动恢复站点名
+      this.classList.add('mobile-active');
+      clearTimeout(this._homeBtnTimer);
+      this._homeBtnTimer = setTimeout(() => {
+        this.classList.remove('mobile-active');
+      }, 600);
   
-      if (!isActive) {
-        // ✅ 第一次点击：拦截跳转，显示房子
-        e.preventDefault();
-        e.stopPropagation();
-        this.classList.add('mobile-active');
-  
-        // 2.5 秒后自动收起
-        clearTimeout(this._homeBtnTimer);
-        this._homeBtnTimer = setTimeout(() => {
-          this.classList.remove('mobile-active');
-        }, 2500);
-      } else {
-        // ✅ 第二次点击（房子状态）：清除状态，正常跳转
-        clearHomeBtnState();
-        // 不阻止默认行为，链接自然跳转
-      }
-    });
-  
-    // 点击其他区域收起
-    document.addEventListener('click', function (e) {
-      if (!e.target.closest('#blog-info')) {
-        clearHomeBtnState();
-      }
+      // 不阻止默认行为，链接自然跳转
     });
   }
