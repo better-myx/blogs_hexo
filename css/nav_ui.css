@@ -220,7 +220,7 @@
 }
 
 
-/* ===== 站点标题 hover/touch 变房子按钮 ===== */
+/* ===== 站点标题变房子按钮 ===== */
 
 /* 1. 基础布局 */
 a.nav-site-title {
@@ -244,7 +244,7 @@ a.nav-site-title .site-name {
   z-index: 1;
 }
 
-/* 3. 房子图标——绝对定位居中叠放，默认隐藏 */
+/* 3. 房子图标——默认隐藏 */
 a.nav-site-title .nav-home-icon {
   position: absolute !important;
   left: 50%;
@@ -259,29 +259,40 @@ a.nav-site-title .nav-home-icon {
   z-index: 2;
 }
 
-/* 4. Hover / 手机端激活：按钮背景出现 */
-#blog-info:hover a.nav-site-title,
+/* 4. 仅在真正有鼠标的设备上启用 hover（解决移动端 sticky hover 问题） */
+@media (hover: hover) {
+  #blog-info:hover a.nav-site-title {
+    background: var(--theme-color) !important;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.2);
+  }
+  #blog-info:hover a.nav-site-title .site-name {
+    opacity: 0 !important;
+    visibility: hidden !important;
+    text-shadow: none !important;
+  }
+  #blog-info:hover a.nav-site-title .nav-home-icon {
+    opacity: 1 !important;
+    transform: translate(-50%, -50%) scale(1);
+  }
+}
+
+/* 5. 手机端点击激活（JS 控制的 mobile-active） */
 #blog-info.mobile-active a.nav-site-title {
   background: var(--theme-color) !important;
   box-shadow: 0 4px 14px rgba(0, 0, 0, 0.2);
 }
-
-/* 5. Hover / 激活：站点名隐藏 */
-#blog-info:hover a.nav-site-title .site-name,
 #blog-info.mobile-active a.nav-site-title .site-name {
   opacity: 0 !important;
   visibility: hidden !important;
   text-shadow: none !important;
 }
-
-/* 6. Hover / 激活：房子图标弹出 */
-#blog-info:hover a.nav-site-title .nav-home-icon,
 #blog-info.mobile-active a.nav-site-title .nav-home-icon {
   opacity: 1 !important;
   transform: translate(-50%, -50%) scale(1);
 }
 
-/* 7. 夜间模式 */
+/* 6. 夜间模式 */
+html[data-theme="dark"] #blog-info.mobile-active a.nav-site-title,
 html[data-theme="dark"] #blog-info:hover a.nav-site-title {
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.45);
 }
