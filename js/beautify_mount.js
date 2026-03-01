@@ -123,32 +123,21 @@
   document.addEventListener('DOMContentLoaded', bindHomeBtnMobile);
   document.addEventListener('pjax:complete', bindHomeBtnMobile);
   
-  document.addEventListener('pjax:send', clearHomeBtnState);
-  
-  function clearHomeBtnState() {
-    const bi = document.getElementById('blog-info');
-    if (!bi) return;
-    bi.classList.remove('mobile-active');
-    clearTimeout(bi._homeBtnTimer);
-  }
-  
   function bindHomeBtnMobile() {
-    clearHomeBtnState();
-  
     const blogInfo = document.getElementById('blog-info');
     if (!blogInfo || blogInfo._homeBtnBound) return;
     blogInfo._homeBtnBound = true;
   
-    blogInfo.addEventListener('click', function () {
+    // 触摸开始：显示房子
+    blogInfo.addEventListener('touchstart', function () {
       if (window.innerWidth > 900) return;
-  
-      // 显示房子，600ms 后自动恢复站点名
       this.classList.add('mobile-active');
-      clearTimeout(this._homeBtnTimer);
-      this._homeBtnTimer = setTimeout(() => {
-        this.classList.remove('mobile-active');
-      }, 600);
+    }, { passive: true });
   
-      // 不阻止默认行为，链接自然跳转
-    });
+    // 触摸结束 / 取消：立刻恢复站点名
+    const clearFn = function () {
+      blogInfo.classList.remove('mobile-active');
+    };
+    blogInfo.addEventListener('touchend', clearFn, { passive: true });
+    blogInfo.addEventListener('touchcancel', clearFn, { passive: true });
   }

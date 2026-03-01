@@ -219,7 +219,8 @@
   vertical-align: -0.15em;
 }
 
-/* ===== 站点标题 hover 变房子按钮 ===== */
+
+/* ===== 站点标题 hover/touch 变房子按钮 ===== */
 
 /* 1. 基础布局 */
 a.nav-site-title {
@@ -232,17 +233,18 @@ a.nav-site-title {
   overflow: visible;
 }
 
-/* 2. 站点名——默认正常显示，加过渡 */
+/* 2. 站点名——默认正常显示 */
 a.nav-site-title .site-name {
   display: inline-block !important;
   opacity: 1 !important;
   visibility: visible !important;
-  transition: opacity 0.18s ease;
+  transition: opacity 0.1s ease;
+  white-space: nowrap;
   position: relative;
   z-index: 1;
 }
 
-/* 3. 房子图标——默认绝对定位居中、完全隐藏 */
+/* 3. 房子图标——绝对定位居中叠放，默认隐藏 */
 a.nav-site-title .nav-home-icon {
   position: absolute !important;
   left: 50%;
@@ -253,7 +255,7 @@ a.nav-site-title .nav-home-icon {
   color: #fff !important;
   opacity: 0 !important;
   pointer-events: none;
-  transition: opacity 0.18s ease, transform 0.18s ease;
+  transition: opacity 0.1s ease, transform 0.1s ease;
   z-index: 2;
 }
 
@@ -264,7 +266,7 @@ a.nav-site-title .nav-home-icon {
   box-shadow: 0 4px 14px rgba(0, 0, 0, 0.2);
 }
 
-/* 5. Hover：站点名隐藏 */
+/* 5. Hover / 激活：站点名隐藏 */
 #blog-info:hover a.nav-site-title .site-name,
 #blog-info.mobile-active a.nav-site-title .site-name {
   opacity: 0 !important;
@@ -272,7 +274,7 @@ a.nav-site-title .nav-home-icon {
   text-shadow: none !important;
 }
 
-/* 6. Hover：房子图标弹出 */
+/* 6. Hover / 激活：房子图标弹出 */
 #blog-info:hover a.nav-site-title .nav-home-icon,
 #blog-info.mobile-active a.nav-site-title .nav-home-icon {
   opacity: 1 !important;
