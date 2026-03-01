@@ -448,7 +448,16 @@ html[data-theme="dark"] #beautify-window .bw-fontsize-item {
   cursor: pointer;
   transition: .15s;
 }
-#beautify-window .bw-reset-fontsize:hover {
+/* 只在有鼠标的设备上触发 hover，手机不生效 */
+@media (hover: hover) {
+  #beautify-window .bw-reset-fontsize:hover {
+    background: var(--theme-color);
+    color: #fff;
+  }
+}
+
+/* 手机触摸按下时有反馈，但松手立刻恢复 */
+#beautify-window .bw-reset-fontsize:active {
   background: var(--theme-color);
   color: #fff;
 }
