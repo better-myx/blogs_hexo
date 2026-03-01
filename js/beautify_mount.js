@@ -120,21 +120,29 @@
   })();
 
 
-
   document.addEventListener('DOMContentLoaded', bindHomeBtnMobile);
   document.addEventListener('pjax:complete', bindHomeBtnMobile);
   
-  function bindHomeBtnMobile() {
-    // ✅ 每次页面切换完成后，立即清除激活状态
+  // ✅ 导航一开始就立即清除，不等完成
+  document.addEventListener('pjax:send', function() {
     const blogInfo = document.getElementById('blog-info');
     if (blogInfo) blogInfo.classList.remove('mobile-active');
+  });
+  
+  function bindHomeBtnMobile() {
+    const blogInfo = document.getElementById('blog-info');
+    // ✅ 每次 pjax 完成，DOM 可能是新元素，先清除再重绑
+    if (blogInfo) {
+      blogInfo.classList.remove('mobile-active');
+      delete blogInfo._homeBtnBound; // 清掉标记，保证重新绑定
+    }
   
     if (!blogInfo || blogInfo._homeBtnBound) return;
     blogInfo._homeBtnBound = true;
   
     blogInfo.addEventListener('click', function(e) {
       if (window.innerWidth > 768) return;
-      // 已激活状态下点击链接 → 正常跳转，不拦截
+      // 已激活状态下点击链接 → 允许跳转
       if (this.classList.contains('mobile-active') && e.target.closest('a.nav-site-title')) return;
       e.preventDefault();
       this.classList.toggle('mobile-active');
@@ -142,7 +150,8 @@
   
     document.addEventListener('click', function(e) {
       if (!e.target.closest('#blog-info')) {
-        blogInfo.classList.remove('mobile-active');
+        const bi = document.getElementById('blog-info');
+        if (bi) bi.classList.remove('mobile-active');
       }
     });
   }
