@@ -121,26 +121,28 @@
 
 
 
-
-document.addEventListener('DOMContentLoaded', bindHomeBtnMobile);
-document.addEventListener('pjax:complete', bindHomeBtnMobile);
-
-function bindHomeBtnMobile() {
-  const blogInfo = document.getElementById('blog-info');
-  if (!blogInfo || blogInfo._homeBtnBound) return;
-  blogInfo._homeBtnBound = true;
-
-  blogInfo.addEventListener('click', function(e) {
-    if (window.innerWidth > 768) return;
-    // 已经是激活状态且点的是链接本身 → 跳转
-    if (this.classList.contains('mobile-active') && e.target.closest('a.nav-site-title')) return;
-    e.preventDefault();
-    this.classList.toggle('mobile-active');
-  });
-
-  document.addEventListener('click', function(e) {
-    if (!e.target.closest('#blog-info')) {
-      blogInfo.classList.remove('mobile-active');
-    }
-  });
-}
+  document.addEventListener('DOMContentLoaded', bindHomeBtnMobile);
+  document.addEventListener('pjax:complete', bindHomeBtnMobile);
+  
+  function bindHomeBtnMobile() {
+    // ✅ 每次页面切换完成后，立即清除激活状态
+    const blogInfo = document.getElementById('blog-info');
+    if (blogInfo) blogInfo.classList.remove('mobile-active');
+  
+    if (!blogInfo || blogInfo._homeBtnBound) return;
+    blogInfo._homeBtnBound = true;
+  
+    blogInfo.addEventListener('click', function(e) {
+      if (window.innerWidth > 768) return;
+      // 已激活状态下点击链接 → 正常跳转，不拦截
+      if (this.classList.contains('mobile-active') && e.target.closest('a.nav-site-title')) return;
+      e.preventDefault();
+      this.classList.toggle('mobile-active');
+    });
+  
+    document.addEventListener('click', function(e) {
+      if (!e.target.closest('#blog-info')) {
+        blogInfo.classList.remove('mobile-active');
+      }
+    });
+  }
