@@ -1,0 +1,295 @@
+/* ============================================================
+   Butterfly 代码块统一样式（合并版）
+   包含：
+   1）干净现代的容器 + 工具栏细节优化（不显示 Mac 顶栏）
+   2）长代码截断 + 底部居中“展开全部/收起”按钮（无箭头）
+   3）代码块内部滚动条使用主题色（右侧主题色“进度条”）
+   4）全屏/放大时：强制显示全部内容并隐藏按钮（cb-fullpage）
+   ============================================================ */
+
+/* ------------------------------------------------------------
+   A. 基础容器（现代简洁）
+   ------------------------------------------------------------ */
+   figure.highlight,
+   .highlight {
+     position: relative;                  /* 为按钮/渐隐提供定位基准 */
+     border-radius: 12px !important;
+     overflow: hidden !important;
+     margin: 1.6em 0 !important;
+     box-shadow: none !important;
+     border: 1px solid rgba(0, 0, 0, 0.10);
+   }
+   
+   /* 强制不显示任何额外顶栏（避免 Mac bar/双 bar） */
+   figure.highlight::before,
+   .highlight::before {
+     content: none !important;
+     display: none !important;
+   }
+   
+   /* 基础排版 */
+   figure.highlight pre,
+   .highlight pre,
+   figure.highlight table,
+   .highlight table {
+     margin: 0 !important;
+     background: transparent !important;
+     font-size: 13.5px;
+     line-height: 1.75;
+   }
+   
+   /* 行号列 gutter */
+   figure.highlight .gutter,
+   .highlight .gutter {
+     user-select: none;
+     border-right: 1px solid rgba(0, 0, 0, 0.08);
+     opacity: 0.85;
+   }
+   
+   figure.highlight .gutter pre,
+   .highlight .gutter pre {
+     padding: 16px 12px 16px 16px !important;
+   }
+   
+   /* 代码列 padding */
+   figure.highlight .code pre,
+   .highlight .code pre {
+     padding: 16px 18px !important;
+   }
+   
+   /* 非 table 结构兜底 */
+   figure.highlight > pre,
+   .highlight > pre {
+     padding: 16px 18px !important;
+   }
+   
+   /* 工具栏 */
+   figure.highlight .highlight-tools,
+   .highlight .highlight-tools {
+     border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+     background: rgba(0, 0, 0, 0.02);
+     backdrop-filter: blur(6px);
+   }
+   
+   figure.highlight .highlight-tools .tool,
+   .highlight .highlight-tools .tool,
+   figure.highlight .highlight-tools button,
+   .highlight .highlight-tools button {
+     border-radius: 8px !important;
+     transition: transform 0.12s ease, opacity 0.12s ease;
+   }
+   
+   figure.highlight .highlight-tools .tool:hover,
+   .highlight .highlight-tools .tool:hover,
+   figure.highlight .highlight-tools button:hover,
+   .highlight .highlight-tools button:hover {
+     transform: translateY(-1px);
+     opacity: 0.95;
+   }
+   
+   /* 语言标签 */
+   figure.highlight .highlight-tools .code-lang,
+   .highlight .highlight-tools .code-lang {
+     font-weight: 600;
+     letter-spacing: 0.06em;
+     opacity: 0.65;
+     text-transform: uppercase;
+   }
+   
+   /* 深色模式 */
+   [data-theme="dark"] figure.highlight,
+   [data-theme="dark"] .highlight {
+     border-color: rgba(255, 255, 255, 0.10);
+   }
+   
+   [data-theme="dark"] figure.highlight .gutter,
+   [data-theme="dark"] .highlight .gutter {
+     border-right-color: rgba(255, 255, 255, 0.10);
+   }
+   
+   [data-theme="dark"] figure.highlight .highlight-tools,
+   [data-theme="dark"] .highlight .highlight-tools {
+     border-bottom-color: rgba(255, 255, 255, 0.10);
+     background: rgba(255, 255, 255, 0.06);
+   }
+   
+   /* ------------------------------------------------------------
+      B. 长代码截断（JS 创建 .cb-scroll 包裹层）
+      ------------------------------------------------------------ */
+   figure.highlight.cb-long,
+   .highlight.cb-long {
+     overflow: hidden;
+   }
+   
+   /* 截断态：在 .cb-scroll 内部滚动 */
+   figure.highlight.cb-clamped .cb-scroll,
+   .highlight.cb-clamped .cb-scroll {
+     max-height: var(--cb-limit, 260px);
+     overflow: auto;
+     padding-bottom: 46px; /* 预留按钮空间 */
+   }
+   
+   /* 保持 table 宽度 */
+   figure.highlight .cb-scroll table,
+   .highlight .cb-scroll table {
+     width: 100%;
+   }
+   
+   /* 底部渐隐（提示还有内容） */
+   figure.highlight.cb-clamped::after,
+   .highlight.cb-clamped::after {
+     content: "";
+     position: absolute;
+     left: 0;
+     right: 0;
+     bottom: 0;
+     height: 74px;
+     pointer-events: none;
+     background: linear-gradient(to bottom, rgba(0,0,0,0), rgba(0,0,0,0.22));
+   }
+   
+   /* 展开后不渐隐 */
+   figure.highlight.cb-expanded::after,
+   .highlight.cb-expanded::after {
+     display: none;
+   }
+   
+   /* ------------------------------------------------------------
+      C. “展开全部/收起”按钮（无箭头、低存在感）
+      ------------------------------------------------------------ */
+   figure.highlight .cb-toggle,
+   .highlight .cb-toggle {
+     position: absolute;
+     left: 50%;
+     bottom: 12px;
+     transform: translateX(-50%);
+     z-index: 8;
+   
+     height: 30px;
+     padding: 0 14px;
+     border-radius: 999px;
+   
+     cursor: pointer;
+     user-select: none;
+   
+     border: 1px solid rgba(255,255,255,0.10);
+     background: rgba(0,0,0,0.18);
+     color: rgba(255,255,255,0.72);
+   
+     backdrop-filter: blur(10px);
+     box-shadow: none;
+   
+     opacity: 0.72;
+     transition: opacity 0.18s ease, transform 0.18s ease, background 0.18s ease, border-color 0.18s ease, color 0.18s ease;
+   }
+   
+   /* 鼠标进入代码块才更明显 */
+   figure.highlight.cb-long:hover .cb-toggle,
+   .highlight.cb-long:hover .cb-toggle {
+     opacity: 0.98;
+   }
+   
+   /* 按钮 hover */
+   figure.highlight .cb-toggle:hover,
+   .highlight .cb-toggle:hover {
+     transform: translateX(-50%) translateY(-1px);
+     background: rgba(0,0,0,0.30);
+     border-color: rgba(255,255,255,0.18);
+     color: rgba(255,255,255,0.92);
+   }
+   
+   /* 强制去箭头（如果之前有 ::after 也会被干掉） */
+   figure.highlight .cb-toggle::after,
+   .highlight .cb-toggle::after {
+     content: none !important;
+     display: none !important;
+   }
+   
+   /* 浅色模式适配 */
+   [data-theme="light"] figure.highlight.cb-clamped::after,
+   [data-theme="light"] .highlight.cb-clamped::after {
+     background: linear-gradient(to bottom, rgba(255,255,255,0), rgba(0,0,0,0.10));
+   }
+   
+   [data-theme="light"] figure.highlight .cb-toggle,
+   [data-theme="light"] .highlight .cb-toggle {
+     border-color: rgba(0,0,0,0.08);
+     background: rgba(255,255,255,0.45);
+     color: rgba(0,0,0,0.62);
+     opacity: 0.72;
+   }
+   
+   [data-theme="light"] figure.highlight.cb-long:hover .cb-toggle,
+   [data-theme="light"] .highlight.cb-long:hover .cb-toggle {
+     opacity: 0.98;
+   }
+   
+   [data-theme="light"] figure.highlight .cb-toggle:hover,
+   [data-theme="light"] .highlight .cb-toggle:hover {
+     background: rgba(255,255,255,0.72);
+     border-color: rgba(0,0,0,0.12);
+     color: rgba(0,0,0,0.82);
+   }
+   
+   /* ------------------------------------------------------------
+      ✅ D. 全屏/放大模式（cb-fullpage）
+      说明：JS 会在全屏时给“全屏代码块”加 cb-fullpage
+      目标：全屏中显示全部内容，不截断，不要按钮
+      ------------------------------------------------------------ */
+   figure.highlight.cb-fullpage::after,
+   .highlight.cb-fullpage::after {
+     display: none !important;
+   }
+   
+   figure.highlight.cb-fullpage .cb-scroll,
+   .highlight.cb-fullpage .cb-scroll {
+     max-height: none !important;     /* 不截断 */
+     overflow: auto;                  /* 内容很长仍可滚动 */
+     padding-bottom: 0 !important;    /* 不需要为按钮预留空间 */
+   }
+   
+   figure.highlight.cb-fullpage .cb-toggle,
+   .highlight.cb-fullpage .cb-toggle {
+     display: none !important;        /* 全屏直接展示全部，不要按钮 */
+   }
+   
+   /* ------------------------------------------------------------
+      E. 代码块内部滚动条主题色（只影响 .cb-scroll）
+      ------------------------------------------------------------ */
+   
+   /* Firefox */
+   figure.highlight .cb-scroll,
+   .highlight .cb-scroll {
+     scrollbar-width: thin;
+     scrollbar-color: var(--theme-color, #49b1f5) transparent;
+   }
+   
+   /* WebKit（Chrome/Edge/Safari） */
+   figure.highlight .cb-scroll::-webkit-scrollbar,
+   .highlight .cb-scroll::-webkit-scrollbar {
+     width: 9px;
+     height: 9px;
+   }
+   
+   figure.highlight .cb-scroll::-webkit-scrollbar-track,
+   .highlight .cb-scroll::-webkit-scrollbar-track {
+     background: transparent;
+   }
+   
+   figure.highlight .cb-scroll::-webkit-scrollbar-thumb,
+   .highlight .cb-scroll::-webkit-scrollbar-thumb {
+     background: color-mix(in srgb, var(--theme-color, #49b1f5) 65%, transparent);
+     border-radius: 999px;
+     border: 2px solid transparent;
+     background-clip: content-box;
+   }
+   
+   figure.highlight .cb-scroll::-webkit-scrollbar-thumb:hover,
+   .highlight .cb-scroll::-webkit-scrollbar-thumb:hover {
+     background: color-mix(in srgb, var(--theme-color, #49b1f5) 85%, transparent);
+   }
+   
+   [data-theme="light"] figure.highlight .cb-scroll::-webkit-scrollbar-thumb,
+   [data-theme="light"] .highlight .cb-scroll::-webkit-scrollbar-thumb {
+     background: color-mix(in srgb, var(--theme-color, #49b1f5) 75%, transparent);
+   }
