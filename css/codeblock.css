@@ -293,3 +293,77 @@
    [data-theme="light"] .highlight .cb-scroll::-webkit-scrollbar-thumb {
      background: color-mix(in srgb, var(--theme-color, #49b1f5) 75%, transparent);
    }
+
+/* ============================================================
+   ✅ 覆盖：展开/收起按钮最终版（修复：变大/不居中）
+   - 固定高度与行高
+   - inline-flex 居中
+   - 字体更精致
+   - 不再受全局 button 样式影响
+   ============================================================ */
+
+   figure.highlight .cb-toggle,
+   .highlight .cb-toggle {
+     /* 彻底覆盖全局 button 样式影响 */
+     all: unset;
+   
+     position: absolute;
+     left: 50%;
+     bottom: 12px;
+     transform: translateX(-50%);
+     z-index: 8;
+   
+     display: inline-flex;
+     align-items: center;
+     justify-content: center;
+   
+     height: 30px;
+     padding: 0 14px;
+     border-radius: 999px;
+   
+     font-size: 12px;
+     font-weight: 600;
+     letter-spacing: 0.01em;
+     line-height: 30px; /* 文字垂直严格居中 */
+   
+     cursor: pointer;
+     user-select: none;
+   
+     border: 1px solid rgba(255, 255, 255, 0.10);
+     background: rgba(0, 0, 0, 0.18);
+     color: rgba(255, 255, 255, 0.72);
+   
+     backdrop-filter: blur(10px);
+     opacity: 0.72;
+   
+     transition: opacity 0.18s ease, transform 0.18s ease, background 0.18s ease, border-color 0.18s ease, color 0.18s ease;
+   }
+   
+   /* 鼠标进入代码块才明显（移动端不会触发 hover，也没关系） */
+   figure.highlight.cb-long:hover .cb-toggle,
+   .highlight.cb-long:hover .cb-toggle {
+     opacity: 0.98;
+   }
+   
+   figure.highlight .cb-toggle:hover,
+   .highlight .cb-toggle:hover {
+     transform: translateX(-50%) translateY(-1px);
+     background: rgba(0, 0, 0, 0.30);
+     border-color: rgba(255, 255, 255, 0.18);
+     color: rgba(255, 255, 255, 0.92);
+   }
+   
+   /* 浅色模式 */
+   [data-theme="light"] figure.highlight .cb-toggle,
+   [data-theme="light"] .highlight .cb-toggle {
+     border-color: rgba(0, 0, 0, 0.08);
+     background: rgba(255, 255, 255, 0.45);
+     color: rgba(0, 0, 0, 0.62);
+   }
+   
+   /* ✅ 全屏/放大：绝对不显示按钮 */
+   figure.highlight.cb-fullpage .cb-toggle,
+   .highlight.cb-fullpage .cb-toggle {
+     display: none !important;
+   }
+   
