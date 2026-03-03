@@ -47,4 +47,31 @@
       margin-top: 16px !important;
     }
   }
-  
+
+  /* =========================
+ * TOC 目录跟随主题色
+ * ========================= */
+
+/* 当前激活项（你截图里那条青色背景） */
+#aside-content #card-toc .toc-content .toc-link.active {
+  background: var(--theme-color) !important;
+  color: #fff !important;
+  border-radius: 6px;
+}
+
+/* 激活项的序号（有的版本序号是单独的 span） */
+#aside-content #card-toc .toc-content .toc-link.active .toc-number {
+  color: #fff !important;
+}
+
+/* 悬停效果也跟随主题色（可选） */
+#aside-content #card-toc .toc-content .toc-link:hover {
+  background: color-mix(in srgb, var(--theme-color) 22%, transparent) !important;
+  border-radius: 6px;
+}
+
+/* 目录标题旁边的小条/强调色（不同版本 class 可能略有差异，保底写一下） */
+#aside-content #card-toc .card-info::before,
+#aside-content #card-toc .item-headline::before {
+  background: var(--theme-color) !important;
+}
