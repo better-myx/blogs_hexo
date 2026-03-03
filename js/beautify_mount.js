@@ -91,6 +91,11 @@
                   <button class="bw-reset-fontsize" id="bw-reset-fontsize" type="button">重置为默认</button>
                 </div>
               </section>
+              <center>
+                <div style="font-size:1.2em;color:var(--theme-color);font-weight:bold;">
+                  ------ ( •̀ ω •́ )y 到底啦 ------
+                </div>
+              </center>
             </div>
 
             <!-- ✅ 8 个拉伸手柄 -->
