@@ -75,3 +75,18 @@
 #aside-content #card-toc .item-headline::before {
   background: var(--theme-color) !important;
 }
+
+
+/* =========================
+   文本选区高亮跟随主题色（::selection）
+   ========================= */
+::selection {
+  background: color-mix(in srgb, var(--theme-color) 50%, transparent) !important;
+  color: #000 !important;
+}
+
+/* 深色模式下选区文字用白色更清晰 */
+html[data-theme="dark"] ::selection {
+  background: color-mix(in srgb, var(--theme-color) 40%, transparent) !important;
+  color: #fff !important;
+}

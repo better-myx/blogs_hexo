@@ -69,17 +69,24 @@
     },
 
     snackbarShow: (text, showAction = false, duration = 2000) => {
-      const { position, bgLight, bgDark } = GLOBAL_CONFIG.Snackbar
-      const bg = document.documentElement.getAttribute('data-theme') === 'light' ? bgLight : bgDark
+      const { position } = GLOBAL_CONFIG.Snackbar
+    
+      // ✅ 动态取当前主题色（跟随你的美化面板变化）
+      const themeColor =
+        getComputedStyle(document.documentElement)
+          .getPropertyValue('--theme-color')
+          .trim() || '#49b1f5'
+    
       Snackbar.show({
         text,
-        backgroundColor: bg,
+        backgroundColor: themeColor,  // ✅ 关键：用主题色
         showAction,
         duration,
         pos: position,
         customClass: 'snackbar-css'
       })
     },
+    
 
     diffDate: (inputDate, more = false) => {
       const dateNow = new Date()
