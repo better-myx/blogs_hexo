@@ -1,6 +1,5 @@
 (function () {
   function ready() {
-    // 你的结构里容器是 #swiper_container，Swiper 容器 class 是 .blog-slider
     var container = document.getElementById('swiper_container');
     var slider = document.querySelector('.blog-slider');
     var slides = document.querySelectorAll('.blog-slider .swiper-slide');
@@ -21,7 +20,6 @@
     window.__swiper = null;
   }
 
-  // 没有 pjax 时，onclick 里写了 pjax.loadUrl 会失效；做一个降级跳转
   function patchPjaxFallback() {
     var hasPjax = window.pjax && typeof window.pjax.loadUrl === 'function';
     if (hasPjax) return;
@@ -46,40 +44,81 @@
     });
   }
 
+  function forceUpdate(sw) {
+    if (!sw) return;
+    try {
+      sw.update();
+      sw.updateSize();
+      sw.updateSlides();
+    } catch (e) {}
+  }
+
   function initSwiper() {
     var ok = ready();
     if (!ok) return false;
 
     var container = ok.container;
 
-    // 关键：移动端首次可能高度为0，先给个最小高度避免白屏
+    // 首屏高度兜底（避免冷启动高度为 0 出白块）
     if (container.offsetHeight === 0) {
       container.style.minHeight = '260px';
     }
 
     destroyOld();
 
-    // 保留你原来的参数，顺便加 observer 让移动端更稳
     window.__swiper = new Swiper('.blog-slider', {
       passiveListeners: true,
       spaceBetween: 30,
       effect: 'fade',
-      loop: true,
+      fadeEffect: { crossFade: true },
+
+      // ✅ 关键：关闭 loop（避免克隆页 + 随机封面导致串图/错图）
+      loop: false,
+
+      // ✅ 关键：用 rewind 实现“末尾回到开头”，但不克隆 slide
+      rewind: true,
+
       autoplay: {
         disableOnInteraction: true,
         delay: 3000
       },
+
       mousewheel: true,
+
       pagination: {
         el: '.blog-slider__pagination',
         clickable: true
       },
+
+      // ✅ 更稳：DOM/父级变化时自动重算
       observer: true,
       observeParents: true,
-      watchOverflow: true
+      watchOverflow: true,
+      updateOnWindowResize: true,
+
+      // ✅ 首屏不要等懒加载（轮播封面建议直接加载）
+      preloadImages: true,
+      lazy: false,
+
+      on: {
+        init: function () {
+          // 初始化后立刻强制回到第 1 张并 update
+          try { this.slideTo(0, 0); } catch (e) {}
+          forceUpdate(this);
+          setTimeout(forceUpdate.bind(null, this), 60);
+          setTimeout(forceUpdate.bind(null, this), 300);
+        },
+        imagesReady: function () {
+          // 图片解码完成再 update 一次（解决首屏空白/错位）
+          forceUpdate(this);
+        },
+        resize: function () {
+          forceUpdate(this);
+        }
+      }
     });
 
-    // 保留你原来的 hover 停止/开始（移动端不会触发 hover，不影响）
+    // hover 停止/开始（移动端不触发，不影响）
     container.onmouseenter = function () {
       try { window.__swiper.autoplay.stop(); } catch (e) {}
     };
@@ -87,35 +126,31 @@
       try { window.__swiper.autoplay.start(); } catch (e) {}
     };
 
-    // 初始化后强制 update 一次，解决首屏尺寸计算不准
+    // 再补几刀：移动端图片解码慢时很关键
     setTimeout(function () {
       try {
-        window.__swiper.update();
-        window.__swiper.updateSize();
-        window.__swiper.updateSlides();
+        window.__swiper.slideTo(0, 0);
+        forceUpdate(window.__swiper);
       } catch (e) {}
-    }, 60);
+    }, 500);
 
     patchPjaxFallback();
     return true;
   }
 
-  // 重试：等资源和 DOM 到位（移动端冷启动必需）
+  // 重试：等资源和 DOM 到位
   function initWithRetry() {
     var times = 0;
     var timer = setInterval(function () {
       times++;
-      if (initSwiper() || times > 30) { // 最多等 3 秒
+      if (initSwiper() || times > 30) {
         clearInterval(timer);
       }
     }, 100);
   }
 
-  // 首次加载
   document.addEventListener('DOMContentLoaded', initWithRetry);
   window.addEventListener('load', initWithRetry);
-
-  // PJAX 切页后再 init（多监听几个事件，兼容不同实现）
   document.addEventListener('pjax:complete', initWithRetry);
   document.addEventListener('pjax:end', initWithRetry);
   document.addEventListener('pjax:success', initWithRetry);
