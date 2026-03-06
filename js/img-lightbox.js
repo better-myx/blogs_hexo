@@ -1,15 +1,14 @@
 /* ============================================================
-   Hexo/Butterfly 图片灯箱（Fancybox v5）— 终极稳妥版（兼容 lazyload）
-   思路：不再依赖提前包裹 <a>，而是“点击时”实时取真图地址并 Fancybox.show()
-   解决：
-   - lazyload 占位图导致 href 错误
-   - PJAX 切页后绑定丢失/重复绑定
-   - 不破坏外链图片（a[href] 非图片链接则放行）
+   Hexo/Butterfly 图片灯箱（Fancybox v5）— 点击时打开（兼容 lazyload）
+   - 不依赖提前包裹 <a>，点击时实时取真图 Fancybox.show()
+   - PJAX 切页自动重新生效（事件委托 + 防重复绑定）
+   - 不破坏外链（img 在 a 内且 href 不是图片链接 → 放行）
+   - 给“可打开灯箱”的图片加 class：.img-lightbox-clickable（用于 cursor:pointer）
    ============================================================ */
    (function () {
     'use strict';
   
-    const GALLERY = 'gallery';
+    const CLICKABLE_CLASS = 'img-lightbox-clickable';
   
     function getArticle() {
       return (
@@ -33,14 +32,12 @@
         img.closest(
           '.avatar, .site-avatar, #aside-content, .aside-content, .card-widget'
         )
-      ) {
-        return false;
-      }
+      ) return false;
   
-      // 手动禁用：<img data-no-lightbox="true">
+      // 手动禁用
       if (img.getAttribute('data-no-lightbox') === 'true') return false;
   
-      // 过滤太小的图（表情/图标）——注意：lazyload 未加载时 naturalWidth 可能为 0，所以要更宽松
+      // 小图（表情/图标）过滤：lazyload 未加载时 naturalWidth 可能为 0，所以只在有尺寸时判断
       const w = img.naturalWidth || img.width || 0;
       const h = img.naturalHeight || img.height || 0;
       if (w && h && (w < 90 || h < 90)) return false;
@@ -48,11 +45,10 @@
       return true;
     }
   
-    // 尽可能从各种 lazyload/图床字段拿到“真图”
+    // 尽量拿到真图地址（兼容常见 lazyload 字段 + srcset）
     function getRealSrc(img) {
       if (!img) return '';
   
-      // 1) 常见 lazyload 字段
       const candidates = [
         img.getAttribute('data-src'),
         img.getAttribute('data-lazy-src'),
@@ -64,17 +60,15 @@
         img.dataset && img.dataset.lazySrc,
         img.dataset && img.dataset.original,
   
-        // 2) srcset 有时才是高清真图
         img.getAttribute('data-srcset'),
         img.getAttribute('data-lazy-srcset'),
         img.dataset && img.dataset.srcset,
         img.dataset && img.dataset.lazySrcset,
   
-        // 3) 最后才用 src（可能是占位）
+        img.getAttribute('srcset'),
         img.getAttribute('src')
       ].filter(Boolean);
   
-      // srcset 取第一条 URL
       for (const v of candidates) {
         const s = String(v).trim();
         if (!s) continue;
@@ -85,23 +79,27 @@
           if (first) return first;
         }
   
-        // 普通 URL
         return s;
       }
   
       return '';
     }
   
-    // 判断当前 img 是否“已经有真图了”（尽量避免拿 placeholder）
     function isProbablyPlaceholder(url) {
       if (!url) return true;
-      // 常见占位特征（透明图、base64、小 gif 等）
       if (url.startsWith('data:')) return true;
       if (/placeholder|loading|lazy/i.test(url)) return true;
       return false;
     }
   
-    // 收集文章内可用图片，生成 Fancybox items
+    // 这张 img 是否“应该放行外链”
+    function isExternalLinkImage(img) {
+      const parentLink = img.closest('a');
+      if (!parentLink) return false;
+      const href = parentLink.getAttribute('href') || '';
+      return href && !isImageUrl(href);
+    }
+  
     function collectGalleryItems(article) {
       const imgs = Array.from(article.querySelectorAll('img')).filter(shouldLightbox);
   
@@ -109,16 +107,11 @@
       const mapImgToIndex = new Map();
   
       imgs.forEach((img) => {
-        // 外链保护：如果在 a 中且 href 非图片链接，则这张图不进灯箱相册（也不拦截点击）
-        const parentLink = img.closest('a');
-        if (parentLink) {
-          const href = parentLink.getAttribute('href') || '';
-          if (href && !isImageUrl(href)) return;
-        }
+        if (isExternalLinkImage(img)) return;
   
         let src = getRealSrc(img);
   
-        // 如果 src 看起来像占位，且父级 a[href] 是图片，就用 a[href]
+        // 如果像占位图，且父级 a[href] 是图片，用 a[href]
         if (isProbablyPlaceholder(src)) {
           const a = img.closest('a');
           if (a) {
@@ -127,20 +120,35 @@
           }
         }
   
-        // 仍然拿不到就跳过
         if (!src || isProbablyPlaceholder(src)) return;
   
         const caption = img.getAttribute('alt') || img.getAttribute('title') || '';
   
         mapImgToIndex.set(img, items.length);
-        items.push({
-          src,
-          type: 'image',
-          caption
-        });
+        items.push({ src, type: 'image', caption });
       });
   
       return { items, mapImgToIndex };
+    }
+  
+    function showFancybox(items, startIndex) {
+      window.Fancybox.show(items, {
+        Hash: false,
+        animated: true,
+        dragToClose: true,
+        placeFocusBack: false,
+        Images: { zoom: true },
+        Thumbs: { autoStart: true },
+        Toolbar: {
+          display: {
+            left: ['infobar'],
+            middle: ['zoomIn', 'zoomOut', 'toggle1to1', 'rotateCCW', 'rotateCW'],
+            right: ['slideshow', 'thumbs', 'close']
+          }
+        },
+        wheel: 'zoom',
+        startIndex
+      });
     }
   
     function openLightboxAt(img) {
@@ -150,60 +158,34 @@
       if (!article) return;
   
       const { items, mapImgToIndex } = collectGalleryItems(article);
-      if (!items.length) return;
   
-      // 找到当前点击图片在 items 里的索引
-      let startIndex = mapImgToIndex.get(img);
-  
-      // 如果点击的这张因为“还没 lazyload 出真图”没进 items，那就尝试只开单张
+      // 点的那张可能没进 items（还没懒加载出真图），就单张打开
+      const startIndex = mapImgToIndex.get(img);
       if (startIndex === undefined) {
-        let one = getRealSrc(img);
+        const one = getRealSrc(img);
         if (!one || isProbablyPlaceholder(one)) return;
   
         const caption = img.getAttribute('alt') || img.getAttribute('title') || '';
-        window.Fancybox.show(
-          [{ src: one, type: 'image', caption }],
-          {
-            Hash: false,
-            Images: { zoom: true },
-            Thumbs: { autoStart: true },
-            Toolbar: {
-              display: {
-                left: ['infobar'],
-                middle: ['zoomIn', 'zoomOut', 'toggle1to1', 'rotateCCW', 'rotateCW'],
-                right: ['slideshow', 'thumbs', 'close']
-              }
-            },
-            wheel: 'zoom'
-          }
-        );
+        showFancybox([{ src: one, type: 'image', caption }], 0);
         return;
       }
   
-      window.Fancybox.show(items, {
-        // ✅ 关闭 hash，避免 #gallery-x + PJAX 刷新感
-        Hash: false,
+      if (items.length) showFancybox(items, startIndex);
+    }
   
-        animated: true,
-        dragToClose: true,
-        placeFocusBack: false,
+    // 给“可点开灯箱”的图片打标（用于 cursor:pointer）
+    function markClickableImages() {
+      const article = getArticle();
+      if (!article) return;
   
-        Images: { zoom: true },
+      article.querySelectorAll('img').forEach((img) => {
+        img.classList.remove(CLICKABLE_CLASS);
   
-        Thumbs: { autoStart: true },
+        if (!shouldLightbox(img)) return;
+        if (isExternalLinkImage(img)) return;
   
-        Toolbar: {
-          display: {
-            left: ['infobar'],
-            middle: ['zoomIn', 'zoomOut', 'toggle1to1', 'rotateCCW', 'rotateCW'],
-            right: ['slideshow', 'thumbs', 'close']
-          }
-        },
-  
-        wheel: 'zoom',
-  
-        // ✅ 从点击的那张开始
-        startIndex
+        // 只要不是明确占位图，就标记为可点击（占位图往往滚动后会变真图）
+        img.classList.add(CLICKABLE_CLASS);
       });
     }
   
@@ -211,7 +193,6 @@
       const article = getArticle();
       if (!article) return;
   
-      // 防重复绑定
       if (article.__lightboxBound) return;
       article.__lightboxBound = true;
   
@@ -223,14 +204,9 @@
   
           if (!shouldLightbox(img)) return;
   
-          // 外链保护：图片在 a 内且 href 不是图片链接 → 放行，不拦截
-          const parentLink = img.closest('a');
-          if (parentLink) {
-            const href = parentLink.getAttribute('href') || '';
-            if (href && !isImageUrl(href)) return;
-          }
+          // 外链保护：放行
+          if (isExternalLinkImage(img)) return;
   
-          // ✅ 拦截默认行为，打开灯箱
           e.preventDefault();
           e.stopPropagation();
   
@@ -238,12 +214,23 @@
         },
         { passive: false }
       );
+  
+      // 懒加载完成后，重新标记一次（让 pointer 能跟上）
+      article.addEventListener(
+        'load',
+        function (e) {
+          const img = e.target && e.target.tagName === 'IMG' ? e.target : null;
+          if (!img) return;
+          markClickableImages();
+        },
+        true
+      );
     }
   
     function init() {
-      // Fancybox 未加载就不绑（避免报错）
       if (!window.Fancybox) return;
       bindClickDelegation();
+      markClickableImages();
     }
   
     document.addEventListener('DOMContentLoaded', init);

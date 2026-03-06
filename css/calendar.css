@@ -62,22 +62,36 @@
     background: var(--theme-color) !important;
     color: #fff !important;
   }
-  
-  /* 文章内可点击放大图片：鼠标变手 */
-#article-container img,
-.post-content img,
-.article img,
-.post img,
-.markdown-body img {
-  cursor: zoom-in;
+
+
+  /* 轮播封面：强制可见 & 不被懒加载遮罩影响 */
+#swiper_container img,
+.swiper-container img,
+.swiper img {
+  opacity: 1 !important;
+  filter: none !important;
+  transform: none !important;
 }
 
-/* 不参与灯箱的图片（你用 data-no-lightbox 禁用时）恢复默认 */
+/* 有些懒加载会给图片外层加遮罩/伪元素，强制去掉 */
+#swiper_container .lazyload,
+#swiper_container .lazyloading,
+#swiper_container .lazyloaded {
+  opacity: 1 !important;
+  filter: none !important;
+}
+
+ 
+/* 只对“会打开灯箱”的图片显示主题同款手型 */
+#article-container img.img-lightbox-clickable,
+.post-content img.img-lightbox-clickable,
+.article img.img-lightbox-clickable,
+.post img.img-lightbox-clickable,
+.markdown-body img.img-lightbox-clickable {
+  cursor: pointer !important;
+}
+
+/* 明确禁用灯箱的图片：保持默认 */
 img[data-no-lightbox="true"] {
   cursor: default !important;
-}
-
-/* 外链跳转图片（包在 a 里但 href 不是图片）也用默认/或 pointer 都行 */
-#article-container a:not([href$=".png"]):not([href$=".jpg"]):not([href$=".jpeg"]):not([href$=".gif"]):not([href$=".webp"]):not([href$=".avif"]):not([href$=".bmp"]):not([href$=".svg"]) img {
-  cursor: pointer; /* 也可以改成 default，看你想不想提示“这是链接” */
 }
