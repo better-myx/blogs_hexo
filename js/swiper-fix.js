@@ -1,3 +1,4 @@
+// 页面完成后让 Swiper 重新计算尺寸
 (function () {
     function getSwiperInstance() {
       return window.swiper || window.SwiperInstance || window.mySwiper || window.__swiper__;
