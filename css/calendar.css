@@ -63,3 +63,21 @@
     color: #fff !important;
   }
   
+  /* 文章内可点击放大图片：鼠标变手 */
+#article-container img,
+.post-content img,
+.article img,
+.post img,
+.markdown-body img {
+  cursor: zoom-in;
+}
+
+/* 不参与灯箱的图片（你用 data-no-lightbox 禁用时）恢复默认 */
+img[data-no-lightbox="true"] {
+  cursor: default !important;
+}
+
+/* 外链跳转图片（包在 a 里但 href 不是图片）也用默认/或 pointer 都行 */
+#article-container a:not([href$=".png"]):not([href$=".jpg"]):not([href$=".jpeg"]):not([href$=".gif"]):not([href$=".webp"]):not([href$=".avif"]):not([href$=".bmp"]):not([href$=".svg"]) img {
+  cursor: pointer; /* 也可以改成 default，看你想不想提示“这是链接” */
+}
