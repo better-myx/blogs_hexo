@@ -2,9 +2,9 @@ console.log("[comments.js] loaded");
 
 (function () {
   const TIP_TEXT = {
-    nick: "输入QQ号会自动补全邮箱并更新头像🐧",
+    nick: "倘若以QQ当作评论用户名称，自动补全邮箱并更新头像🐧",
     mail: "收到回复将会发送到您的邮箱📧",
-    link: "可以通过昵称访问您的网站🔗"
+    link: "可以输入您的个人网站🔗"
   };
 
   const QQ_REGEX = /^\d{5,11}$/;
