@@ -8,8 +8,8 @@
   const DEFAULTS = {
     font: "ZhuZiAWan",
   
-    // ✅ 白天默认樱花
-    dayEffect: "sakura",
+  // ✅ 白天默认雪花
+  dayEffect: "snow",
   
     // ✅ 夜间星空仍保留
     starfield: true,
@@ -186,7 +186,7 @@
     if (fsEl) fsEl.textContent = s.fontSize ?? (isMob ? 14 : 16);
     if (h1El) h1El.textContent = s.h1Size  ?? (isMob ? 18 : 24);
 
-    const currentDayEffect = s.dayEffect ?? "sakura";
+    const currentDayEffect = s.dayEffect ?? DEFAULTS.dayEffect;
     document.querySelectorAll("#bw-dayeffects .bw-chip").forEach(el => {
       el.classList.toggle("active", el.dataset.effect === currentDayEffect);
     });
@@ -197,19 +197,29 @@
   function bindThemeAutoResetOnce() {
     if (window.__beautifyThemeAutoResetBound) return;
     window.__beautifyThemeAutoResetBound = true;
-
+  
     const mo = new MutationObserver(() => {
       const s = load();
+  
+      // 主题色切换时恢复当前模式默认色
       if (isDark()) s.themeColorDark = DEFAULTS.themeColorDark;
       else s.themeColorLight = DEFAULTS.themeColorLight;
-
+  
+      // ✅ 日夜切换后，白天特效恢复默认雪花
+      s.dayEffect = DEFAULTS.dayEffect;
+  
       save(s);
       applyThemeColorBySettings(s);
+      applyDayEffect(s.dayEffect);
       syncActiveUI();
     });
-
-    mo.observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
+  
+    mo.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ["data-theme"]
+    });
   }
+  
 
   // 供 window.js 调用
   window.__beautifySettings = {
@@ -237,7 +247,7 @@
     applyThemeColorBySettings(s);
 
     applyFont(s.font);
-    applyDayEffect(s.dayEffect ?? "sakura");
+    applyDayEffect(s.dayEffect ?? DEFAULTS.dayEffect);
     applyStarfield(!!s.starfield);
     
 
@@ -251,9 +261,10 @@
   }
 
   function applyDayEffect(mode) {
-    const m = mode || "sakura";
+    const m = mode || DEFAULTS.dayEffect;
     document.documentElement.setAttribute("data-day-effect", m);
   }
+  
   
 
   document.addEventListener("DOMContentLoaded", boot);

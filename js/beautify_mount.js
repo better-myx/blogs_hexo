@@ -27,11 +27,11 @@
                 <div class="bw-item" style="align-items:flex-start;">
                   <div class="bw-item-text" style="width:100%;">
                     <div class="bw-item-title">白天特效</div>
-                    <div class="bw-item-desc">白天模式下可切换为樱花、雪花或关闭</div>
+                    <div class="bw-item-desc">白天默认雪花；夜间切回白天会恢复为雪花</div>
 
                     <div class="bw-chips" id="bw-dayeffects" style="margin-top:10px;">
-                      <button class="bw-chip active" type="button" data-effect="sakura">樱花</button>
-                      <button class="bw-chip" type="button" data-effect="snow">雪花</button>
+                      <button class="bw-chip" type="button" data-effect="sakura">樱花</button>
+                      <button class="bw-chip active" type="button" data-effect="snow">雪花</button>
                       <button class="bw-chip" type="button" data-effect="off">关闭</button>
                     </div>
                   </div>

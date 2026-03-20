@@ -392,7 +392,7 @@
       const s = window.__beautifySettings.load();
       window.__beautifySettings.applyThemeColorBySettings(s);
       window.__beautifySettings.applyFont(s.font);
-      window.__beautifySettings.applyDayEffect(s.dayEffect ?? "sakura");
+      window.__beautifySettings.applyDayEffect(s.dayEffect ?? "snow");
       window.__beautifySettings.applyStarfield(!!s.starfield);
       window.__beautifySettings.syncActiveUI();
     }

@@ -88,12 +88,32 @@
         [255, 242, 248]
       ]);
     } else {
+      // p.size = rand(isMobile ? 11 : 13, isMobile ? 20 : 26) * p.depth;
+      // p.speedY = rand(0.85, 1.8) * p.depth;
+      // p.speedX = rand(-0.08, 0.08);
+      // p.opacity = clamp(rand(0.7, 0.98), 0.5, 1);
+      // p.swing = rand(0.008, 0.02);
+      // p.swingAmp = rand(0.16, 0.45) * p.depth;
       p.size = rand(isMobile ? 11 : 13, isMobile ? 20 : 26) * p.depth;
-      p.speedY = rand(0.85, 1.8) * p.depth;
-      p.speedX = rand(-0.08, 0.08);
+
+      // ✅ 移动端樱花速度放慢，接近雪花观感
+      p.speedY = isMobile
+        ? rand(0.42, 0.95) * p.depth
+        : rand(0.85, 1.8) * p.depth;
+
+      // ✅ 横向漂移也略微收一点，移动端更柔和
+      p.speedX = isMobile
+        ? rand(-0.04, 0.04)
+        : rand(-0.08, 0.08);
+
       p.opacity = clamp(rand(0.7, 0.98), 0.5, 1);
       p.swing = rand(0.008, 0.02);
-      p.swingAmp = rand(0.16, 0.45) * p.depth;
+
+      // ✅ 移动端摆动幅度减小，避免“飘太急”
+      p.swingAmp = isMobile
+        ? rand(0.10, 0.22) * p.depth
+        : rand(0.16, 0.45) * p.depth;
+
       p.rotation = rand(0, Math.PI * 2);
       p.rotationSpeed = rand(-0.01, 0.01);
       p.tilt = rand(0.92, 1.08);
