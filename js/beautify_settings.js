@@ -7,16 +7,19 @@
 
   const DEFAULTS = {
     font: "ZhuZiAWan",
-    snowfall: true,
+  
+    // ✅ 白天默认樱花
+    dayEffect: "sakura",
+  
+    // ✅ 夜间星空仍保留
     starfield: true,
-
-    // ✅ 白天/夜间分别存色
+  
     themeColorLight: "green",
     themeColorDark: "blackgray",
-    // ✅ 字体大小默认值（手机/桌面不同）
     fontSize: isMobileDevice ? 14 : 16,
     h1Size:   isMobileDevice ? 18 : 24,
   };
+  
 
   const COLORS = {
     red: "rgb(241, 71, 71)",
@@ -182,6 +185,12 @@
     const h1El = document.getElementById('bw-h1size-val');
     if (fsEl) fsEl.textContent = s.fontSize ?? (isMob ? 14 : 16);
     if (h1El) h1El.textContent = s.h1Size  ?? (isMob ? 18 : 24);
+
+    const currentDayEffect = s.dayEffect ?? "sakura";
+    document.querySelectorAll("#bw-dayeffects .bw-chip").forEach(el => {
+      el.classList.toggle("active", el.dataset.effect === currentDayEffect);
+    });
+
   }
 
   // ✅ 需求 3：只要切换日夜模式，就自动回到默认色（白天绿/夜晚黑灰）
@@ -210,6 +219,7 @@
     applyThemeColor,
     applyThemeColorBySettings,
     renderOptionsOnce,
+    applyDayEffect,   // ✅ 新增
     applySnowfall,
     applyStarfield,
     applyFontSize,   // ✅ 新增
@@ -227,8 +237,9 @@
     applyThemeColorBySettings(s);
 
     applyFont(s.font);
-    applySnowfall(!!s.snowfall);
+    applyDayEffect(s.dayEffect ?? "sakura");
     applyStarfield(!!s.starfield);
+    
 
     // ✅ 应用字体大小
     applyFontSize(s.fontSize ?? (isMob ? 14 : 16));
@@ -238,6 +249,12 @@
 
     bindThemeAutoResetOnce();
   }
+
+  function applyDayEffect(mode) {
+    const m = mode || "sakura";
+    document.documentElement.setAttribute("data-day-effect", m);
+  }
+  
 
   document.addEventListener("DOMContentLoaded", boot);
   document.addEventListener("pjax:complete", boot);

@@ -288,15 +288,17 @@
       if (t.matches("#beautify-window .bw-ctl.min")) { minimizeWindow(); return; }
       if (t.matches("#beautify-window .bw-ctl.max")) { toggleMaximize(); return; }
 
-      // 雪花开关
-      if (t.closest("#bw-toggle-snowfall") && window.__beautifySettings){
+      // 雪花樱花开关
+      const dayEffectBtn = t.closest("#bw-dayeffects .bw-chip");
+      if (dayEffectBtn && window.__beautifySettings){
         const s = window.__beautifySettings.load();
-        s.snowfall = !s.snowfall;
+        s.dayEffect = dayEffectBtn.dataset.effect || "sakura";
         window.__beautifySettings.save(s);
-        window.__beautifySettings.applySnowfall(!!s.snowfall);
+        window.__beautifySettings.applyDayEffect(s.dayEffect);
         window.__beautifySettings.syncActiveUI();
         return;
       }
+      
 
       // 星空开关
       if (t.closest("#bw-toggle-starfield") && window.__beautifySettings){
@@ -390,7 +392,7 @@
       const s = window.__beautifySettings.load();
       window.__beautifySettings.applyThemeColorBySettings(s);
       window.__beautifySettings.applyFont(s.font);
-      window.__beautifySettings.applySnowfall(!!s.snowfall);
+      window.__beautifySettings.applyDayEffect(s.dayEffect ?? "sakura");
       window.__beautifySettings.applyStarfield(!!s.starfield);
       window.__beautifySettings.syncActiveUI();
     }

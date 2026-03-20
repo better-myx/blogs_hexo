@@ -10,9 +10,27 @@
   }
   
   /* ✅ 白天 + 开关开启 才显示 */
-  html[data-theme="light"][data-snowfall="on"] #snowfall{
-    display:block;
+  #snowfall{
+    display: none;
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: -1;
   }
+  
+  /* ✅ 白天且不是关闭时显示 */
+  html[data-theme="light"][data-day-effect="sakura"] #snowfall,
+  html[data-theme="light"][data-day-effect="snow"] #snowfall{
+    display: block;
+  }
+  
+  html[data-theme="light"][data-day-effect="off"] #snowfall,
+  html[data-theme="dark"] #snowfall{
+    display: none;
+  }
+  
   
   html[data-theme="dark"] #snowfall{
     display: none;
