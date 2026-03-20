@@ -2,7 +2,7 @@ console.log("[comments.js] loaded");
 
 (function () {
   const TIP_TEXT = {
-    nick: "倘若以QQ当作评论用户名称，自动补全邮箱并更新头像🐧",
+    nick: "若输入QQ号作为评论昵称，邮箱将自动补全并更新左方头像为您的QQ头像🐧",
     mail: "收到回复将会发送到您的邮箱📧",
     link: "可以输入您的个人网站🔗"
   };
