@@ -98,12 +98,12 @@
 
       // ✅ 移动端樱花速度放慢，接近雪花观感
       p.speedY = isMobile
-        ? rand(0.42, 0.95) * p.depth
+        ? rand(0.52, 0.10) * p.depth
         : rand(0.85, 1.8) * p.depth;
 
       // ✅ 横向漂移也略微收一点，移动端更柔和
       p.speedX = isMobile
-        ? rand(-0.04, 0.04)
+        ? rand(-0.06, 0.06)
         : rand(-0.08, 0.08);
 
       p.opacity = clamp(rand(0.7, 0.98), 0.5, 1);
